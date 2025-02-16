@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">CourseWork</string>
+    <string name="welcome">Добро пожаловать в</string>
+    <string name="course_work">CourseWork</string>
+    <string name="food_desc">Ваши любимые блюда быстро доставляются до двери.</string>
+    <string name="alread_have_account">Уже есть аккаунт? Войти</string>
+    <string name="dont_have_account">Нет аккаунта? Регистрация</string>
+    <string name="sign_with_email">Войти по почте</string>
+    <string name="sign_with_facebook">Facebook</string>
+    <string name="sign_with_google">Google</string>
+    <string name="sign_in_title">Войти</string>
+    <string name="sign_in_with">Войти с помощью</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="password">Пароль</string>
+    <string name="email">Почта</string>
+    <string name="full_name">Имя</string>
+    <string name="sign_in">Войти</string>
+    <string name="facebook_app_id">1357993582316681</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">6ad5689e67af1a761a0d656bd04e5594</string>
+    <string name="ok">OK</string>
+    <string name="skip">Пропустить</string>
+</resources>
