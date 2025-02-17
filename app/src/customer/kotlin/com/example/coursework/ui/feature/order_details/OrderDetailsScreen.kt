@@ -52,7 +52,7 @@ fun OrderDetailsScreen(
         }
     }
 
-    Column(Modifier.padding(horizontal = 16.dp)) {
+    Column() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

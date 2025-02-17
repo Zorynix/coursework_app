@@ -94,7 +94,8 @@ fun AddressListScreen(
                 imageVector = Icons.Filled.AddCircle,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(24.dp)
+                    .padding(16.dp)
+                    .size(25.dp)
                     .clickable {
                         viewModel.onAddAddressClicked()
                     })
@@ -106,7 +107,6 @@ fun AddressListScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // Show loading
                     CircularProgressIndicator()
                     Text(
                         text = "Загрузка..",
@@ -136,7 +136,6 @@ fun AddressListScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // Show loading
                     Text(
                         text = addressState.message,
                         style = MaterialTheme.typography.bodyMedium,

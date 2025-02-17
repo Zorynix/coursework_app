@@ -117,7 +117,7 @@ import kotlinx.coroutines.flow.collectLatest
                 .padding(16.dp)
         ) {
             Text(
-                text = "$${foodItem.price}",
+                text = "$ ${foodItem.price}",
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineLarge
             )

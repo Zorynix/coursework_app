@@ -69,7 +69,7 @@ fun AuthScreen(
     }
     val brush = Brush.verticalGradient(
         colors = listOf(
-            androidx.compose.ui.graphics.Color.Transparent, androidx.compose.ui.graphics.Color.Black
+            Color.Transparent, Color.Black
         ),
         startY = imageSize.value.height.toFloat() / 3,
     )

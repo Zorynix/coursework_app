@@ -75,6 +75,7 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
             Image(
                 painter = painterResource(id = R.drawable.back),
                 modifier = Modifier
+                    .size(10.dp)
                     .shadow(12.dp, clip = true, shape = CircleShape)
                     .clip(CircleShape)
                     .clickable {
@@ -87,7 +88,6 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
         }
         when (uiState.value) {
             is OrderListViewModel.OrderListState.Loading -> {
-                // Show loading
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +101,6 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
             is OrderListViewModel.OrderListState.OrderList -> {
                 val list = (uiState.value as OrderListViewModel.OrderListState.OrderList).orderList
                 if (list.isEmpty()) {
-                    // Show empty
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
