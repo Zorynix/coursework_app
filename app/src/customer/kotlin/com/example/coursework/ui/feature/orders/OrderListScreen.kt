@@ -75,7 +75,6 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
             Image(
                 painter = painterResource(id = R.drawable.back),
                 modifier = Modifier
-                    .size(10.dp)
                     .shadow(12.dp, clip = true, shape = CircleShape)
                     .clip(CircleShape)
                     .clickable {

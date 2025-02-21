@@ -63,7 +63,7 @@ class SignInViewModel @Inject constructor(
                 else -> {
                     val errr = (response as? ApiResponse.Error)?.code ?: 0
                     error = "Вход не удался"
-                    errorDescription = "Не удалось зарегистрироваться"
+                    errorDescription = "Не удалось войти"
                     when (errr) {
                         400 -> {
                             error = "Неверные данные"
