@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -60,6 +61,15 @@ import com.example.coursework.ui.navigation.RestaurantDetails
 import com.example.coursework.ui.theme.Primary
 import com.example.coursework.ui.theme.Typography
 import kotlinx.coroutines.flow.collectLatest
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.platform.LocalFocusManager
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -68,6 +78,7 @@ fun SharedTransitionScope.HomeScreen(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         viewModel.navigationEvent.collectLatest {
@@ -75,7 +86,6 @@ fun SharedTransitionScope.HomeScreen(
                 is HomeViewModel.HomeScreenNavigationEvents.NavigateToDetail -> {
                     navController.navigate(RestaurantDetails(it.id, it.name, it.imageUrl))
                 }
-
                 else -> {}
             }
         }
@@ -83,46 +93,93 @@ fun SharedTransitionScope.HomeScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         val uiState = viewModel.uiState.collectAsState()
-        when (uiState.value) {
-            is HomeViewModel.HomeScreenState.Loading -> {
-                Text(text = "Загрузка")
-            }
+        var searchQuery by rememberSaveable { mutableStateOf("") }
 
-            is HomeViewModel.HomeScreenState.Empty -> {
-                Text(text = "Пусто")
-            }
-
-            is HomeViewModel.HomeScreenState.Success -> {
-
-                var value by rememberSaveable { mutableStateOf("") }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    SearchBar(
-                        modifier = Modifier.weight(1f),
-                        value = value,
-                        leftContent = {
-                            Image(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.search),
-                                contentDescription = "search")
-                        },
-                        placeholder = "Найти еду или ресторан",
-                        onChange = { value = it }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            SearchBar(
+                modifier = Modifier.weight(1f),
+                value = searchQuery,
+                leftContent = {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.search),
+                        contentDescription = "search"
                     )
+                },
+                placeholder = "Найти еду или ресторан",
+                onChange = { newValue ->
+                    searchQuery = newValue
+                    if (newValue.isNotEmpty()) {
+                        viewModel.searchRestaurants(newValue)
+                    } else {
+                        viewModel.loadInitialData()
+                    }
+                },
+                onClear = {
+                    searchQuery = ""
+                    focusManager.clearFocus()
+                    viewModel.loadInitialData()
                 }
+            )
+        }
 
+        when (val state = uiState.value) {
+            is HomeViewModel.HomeScreenState.Loading -> {
+                Text(text = "Загрузка", modifier = Modifier.fillMaxSize().wrapContentSize())
+            }
+            is HomeViewModel.HomeScreenState.Empty -> {
+                Text(text = "Пусто", modifier = Modifier.fillMaxSize().wrapContentSize())
+            }
+            is HomeViewModel.HomeScreenState.Success -> {
                 val categories = viewModel.categories
                 CategoriesList(categories = categories, onCategorySelected = {})
 
                 RestaurantList(
                     restaurants = viewModel.restaurants,
                     animatedVisibilityScope,
-                    onRestaurantSelected = { viewModel.onRestaurantSelected(it) })
+                    onRestaurantSelected = { viewModel.onRestaurantSelected(it) }
+                )
+            }
+            is HomeViewModel.HomeScreenState.SearchResults -> {
+                RestaurantList(
+                    restaurants = state.restaurants,
+                    animatedVisibilityScope,
+                    onRestaurantSelected = { viewModel.onRestaurantSelected(it) }
+                )
+            }
+            is HomeViewModel.HomeScreenState.NoSearchResults -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Нет результатов поиска",
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { viewModel.retryLastSearch() }) {
+                        Text(text = "Обновить")
+                    }
+                }
+            }
+            is HomeViewModel.HomeScreenState.Error -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(text = "Ошибка при выполнении запроса")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = { viewModel.retryLastSearch() }) {
+                        Text(text = "Обновить")
+                    }
+                }
             }
         }
     }
@@ -134,8 +191,12 @@ fun SearchBar(
     value: String,
     placeholder: String,
     leftContent: @Composable () -> Unit,
-    onChange: (value: String) -> Unit
+    onChange: (value: String) -> Unit,
+    onClear: () -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
@@ -147,6 +208,7 @@ fun SearchBar(
     ) {
         leftContent()
         Spacer(modifier = Modifier.width(8.dp))
+
         TextField(
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
@@ -158,9 +220,26 @@ fun SearchBar(
             ),
             value = value,
             onValueChange = onChange,
-            placeholder = { Text(text = placeholder) },
+            placeholder = {
+                if (value.isEmpty()) Text(text = placeholder)
+            },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .weight(1f)
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    if (it.isFocused) keyboardController?.show()
+                },
+            trailingIcon = {
+                if (value.isNotEmpty()) {
+                    IconButton(onClick = onClear) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Очистить"
+                        )
+                    }
+                }
+            }
         )
     }
 }

@@ -1,10 +1,12 @@
 package com.example.coursework.ui.feature.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.coursework.data.FoodApi
 import com.example.coursework.data.models.Category
 import com.example.coursework.data.models.Restaurant
+import com.example.coursework.data.remote.ApiResponse
 import com.example.coursework.data.remote.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,19 +28,49 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
 
     var categories = emptyList<Category>()
     var restaurants = emptyList<Restaurant>()
+    private var lastSearchQuery: String? = null
 
     init {
+        loadInitialData()
+    }
+
+    fun loadInitialData() {
         viewModelScope.launch {
+            _uiState.value = HomeScreenState.Loading
             categories = getCategories()
             restaurants = getPopularRestaurants()
-
             if (categories.isNotEmpty() && restaurants.isNotEmpty()) {
                 _uiState.value = HomeScreenState.Success
             } else {
                 _uiState.value = HomeScreenState.Empty
             }
         }
+    }
 
+    fun searchRestaurants(query: String) {
+        lastSearchQuery = query
+        viewModelScope.launch {
+            _uiState.value = HomeScreenState.Loading
+            if (query.isEmpty()) {
+                _uiState.value = HomeScreenState.Success
+            } else {
+                val filteredRestaurants = restaurants.filter {
+                    it.name.contains(query, ignoreCase = true)
+                }
+                if (filteredRestaurants.isNotEmpty()) {
+                    _uiState.value = HomeScreenState.SearchResults(filteredRestaurants)
+                } else {
+                    _uiState.value = HomeScreenState.NoSearchResults
+                }
+            }
+        }
+    }
+
+    fun retryLastSearch() {
+        lastSearchQuery?.let { query ->
+            Log.d("RetryLastSearch", "Повторный поиск с запросом: $query")
+            searchRestaurants(query)
+        } ?: Log.d("RetryLastSearch", "Нет последнего запроса для повторения")
     }
 
     private suspend fun getCategories(): List<Category> {
@@ -48,7 +80,7 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
             foodApi.getCategories()
         }
         when (response) {
-            is com.example.coursework.data.remote.ApiResponse.Success -> {
+            is ApiResponse.Success -> {
                 list = response.data.data
             }
 
@@ -65,7 +97,7 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
             foodApi.getRestaurants(40.7128, -74.0060)
         }
         when (response) {
-            is com.example.coursework.data.remote.ApiResponse.Success -> {
+            is ApiResponse.Success -> {
                 list = response.data.data
 
             }
@@ -79,11 +111,7 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
     fun onRestaurantSelected(it: Restaurant) {
         viewModelScope.launch {
             _navigationEvent.emit(
-                HomeScreenNavigationEvents.NavigateToDetail(
-                    it.name,
-                    it.imageUrl,
-                    it.id
-                )
+                HomeScreenNavigationEvents.NavigateToDetail(it.name, it.imageUrl, it.id)
             )
         }
     }
@@ -92,6 +120,9 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
         object Loading : HomeScreenState()
         object Empty : HomeScreenState()
         object Success : HomeScreenState()
+        data class SearchResults(val restaurants: List<Restaurant>) : HomeScreenState()
+        object NoSearchResults : HomeScreenState()
+        object Error : HomeScreenState()
     }
 
     sealed class HomeScreenNavigationEvents {
