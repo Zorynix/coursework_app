@@ -66,15 +66,17 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
             }
         }
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.back),
-                modifier = Modifier
+                modifier =
+                Modifier
                     .shadow(12.dp, clip = true, shape = CircleShape)
                     .clip(CircleShape)
                     .clickable {
@@ -90,7 +92,7 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     CircularProgressIndicator()
                     Text(text = "Загрузка")
@@ -103,7 +105,7 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         Text(text = "Заказы не найдены")
                     }
@@ -112,35 +114,43 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
                     val coroutineScope = rememberCoroutineScope()
                     val pagerState =
                         rememberPagerState(pageCount = { listOfTabs.size }, initialPage = 0)
-                    TabRow(selectedTabIndex = pagerState.currentPage,
-                        modifier = Modifier
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        modifier =
+                        Modifier
                             .padding(16.dp)
                             .clip(RoundedCornerShape(32.dp))
                             .border(
                                 width = 1.dp,
                                 color = Color.LightGray,
-                                shape = RoundedCornerShape(32.dp)
+                                shape = RoundedCornerShape(32.dp),
                             )
                             .padding(4.dp),
                         indicator = {},
-                        divider = {}) {
+                        divider = {},
+                    ) {
                         listOfTabs.forEachIndexed { index, title ->
-                            Tab(text = {
-                                Text(
-                                    text = title,
-                                    color = if (pagerState.currentPage == index) Color.White else Color.Gray
-                                )
-                            }, selected = pagerState.currentPage == index, onClick = {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(index)
-                                }
-                            }, modifier = Modifier
-                                .clip(
-                                    RoundedCornerShape(32.dp)
-                                )
-                                .background(
-                                    color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else Color.White
-                                )
+                            Tab(
+                                text = {
+                                    Text(
+                                        text = title,
+                                        color = if (pagerState.currentPage == index) Color.White else Color.Gray,
+                                    )
+                                },
+                                selected = pagerState.currentPage == index,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(index)
+                                    }
+                                },
+                                modifier =
+                                Modifier
+                                    .clip(
+                                        RoundedCornerShape(32.dp),
+                                    )
+                                    .background(
+                                        color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else Color.White,
+                                    ),
                             )
                         }
                     }
@@ -148,17 +158,21 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
                     HorizontalPager(state = pagerState) {
                         when (it) {
                             0 -> {
-                                OrderListInternal(list.filter { order -> order.status == "В ожидании" },
+                                OrderListInternal(
+                                    list.filter { order -> order.status == "В ожидании" },
                                     onClick = { order ->
                                         viewModel.navigateToDetails(order)
-                                    })
+                                    },
+                                )
                             }
 
                             1 -> {
-                                OrderListInternal(list.filter { order -> order.status != "В ожидании" },
+                                OrderListInternal(
+                                    list.filter { order -> order.status != "В ожидании" },
                                     onClick = { order ->
                                         viewModel.navigateToDetails(order)
-                                    })
+                                    },
+                                )
                             }
                         }
                     }
@@ -169,7 +183,7 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
                 // Show error
                 Column(
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(text = (uiState.value as OrderListViewModel.OrderListState.Error).message)
                     Button(onClick = { viewModel.getOrders() }) {
@@ -180,7 +194,6 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
 
             else -> {}
         }
-
     }
 }
 
@@ -190,7 +203,7 @@ fun OrderListInternal(list: List<Order>, onClick: (Order) -> Unit) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Text(text = "Заказы не найдены")
         }
@@ -207,16 +220,16 @@ fun OrderListInternal(list: List<Order>, onClick: (Order) -> Unit) {
 fun OrderDetailsText(order: Order) {
     Column {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
-
             AsyncImage(
                 model = order.restaurant.imageUrl,
                 contentDescription = null,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .size(64.dp)
                     .clip(RoundedCornerShape(12.dp)),
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
             )
             Spacer(modifier = Modifier.size(8.dp))
             Column {
@@ -226,13 +239,13 @@ fun OrderDetailsText(order: Order) {
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 1
+                    maxLines = 1,
                 )
-                Text(text = "${order.items.size.toString()} блюд", color = Color.Gray)
+                Text(text = "${order.items.size} блюд", color = Color.Gray)
                 Text(
                     text = order.restaurant.name,
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black
+                    color = Color.Black,
                 )
             }
         }
@@ -245,37 +258,22 @@ fun OrderDetailsText(order: Order) {
 @Composable
 fun OrderListItem(order: Order, onClick: () -> Unit) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .fillMaxWidth()
             .shadow(8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(color = androidx.compose.ui.graphics.Color.White)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         OrderDetailsText(order = order)
         Button(onClick = onClick) {
             Text(
                 text = "Показать детали",
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
         }
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

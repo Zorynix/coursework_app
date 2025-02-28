@@ -6,5 +6,5 @@ data class CartItem(
     val menuItemId: FoodItem,
     val quantity: Int,
     val restaurantId: String,
-    val userId: String
+    val userId: String,
 )

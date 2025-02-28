@@ -1,6 +1,5 @@
 package com.example.coursework.ui.feature.address_list
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.coursework.data.FoodApi
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddressListViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
-
     private val _state = MutableStateFlow<AddressState>(AddressState.Loading)
     val state = _state.asStateFlow()
 

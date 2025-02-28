@@ -1,18 +1,13 @@
 package com.example.coursework.ui.features.auth.signup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.coursework.data.FoodApi
 import com.example.coursework.data.CourseWorkSession
+import com.example.coursework.data.FoodApi
 import com.example.coursework.data.models.SignUpRequest
 import com.example.coursework.data.remote.ApiResponse
 import com.example.coursework.data.remote.safeApiCall
-import com.example.coursework.ui.features.auth.AuthScreenViewModel.AuthEvent
 import com.example.coursework.ui.features.auth.BaseAuthViewModel
-import com.example.coursework.ui.features.auth.login.SignInViewModel.SigInNavigationEvent
-import com.example.coursework.ui.features.auth.login.SignInViewModel.SignInEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(override val foodApi: FoodApi, val session:CourseWorkSession) :
+class SignUpViewModel @Inject constructor(override val foodApi: FoodApi, val session: CourseWorkSession) :
     BaseAuthViewModel(foodApi) {
     private val _uiState = MutableStateFlow<SignupEvent>(SignupEvent.Nothing)
     val uiState = _uiState.asStateFlow()
@@ -54,15 +49,16 @@ class SignUpViewModel @Inject constructor(override val foodApi: FoodApi, val ses
         viewModelScope.launch {
             _uiState.value = SignupEvent.Loading
             try {
-                val response = safeApiCall {
-                    foodApi.signUp(
-                        SignUpRequest(
-                            name = name.value,
-                            email = email.value,
-                            password = password.value
+                val response =
+                    safeApiCall {
+                        foodApi.signUp(
+                            SignUpRequest(
+                                name = name.value,
+                                email = email.value,
+                                password = password.value,
+                            ),
                         )
-                    )
-                }
+                    }
                 when (response) {
                     is ApiResponse.Success -> {
                         _uiState.value = SignupEvent.Success
@@ -83,15 +79,11 @@ class SignUpViewModel @Inject constructor(override val foodApi: FoodApi, val ses
                         _uiState.value = SignupEvent.Error
                     }
                 }
-
-
             } catch (e: Exception) {
                 e.printStackTrace()
                 _uiState.value = SignupEvent.Error
             }
-
         }
-
     }
 
     fun onLoginClicked() {

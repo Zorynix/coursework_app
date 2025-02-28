@@ -21,7 +21,6 @@ class AddAddressViewModel @Inject constructor(
     val foodApi: FoodApi,
     private val locationManager: LocationManager,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow<AddAddressState>(AddAddressState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -48,7 +47,6 @@ class AddAddressViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
     fun onAddAddressClicked() {

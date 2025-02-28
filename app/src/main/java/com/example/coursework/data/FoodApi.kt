@@ -39,9 +39,7 @@ interface FoodApi {
     suspend fun getCategories(): Response<CategoriesResponse>
 
     @GET("/restaurants")
-    suspend fun getRestaurants(
-        @Query("lat") lat: Double, @Query("lon") lon: Double
-    ): Response<ResturauntsResponse>
+    suspend fun getRestaurants(@Query("lat") lat: Double, @Query("lon") lon: Double): Response<ResturauntsResponse>
 
     @POST("/auth/signup")
     suspend fun signUp(@Body request: SignUpRequest): Response<AuthResponse>
@@ -81,7 +79,8 @@ interface FoodApi {
 
     @POST("/payments/confirm/{paymentIntentId}")
     suspend fun verifyPurchase(
-        @Body request: ConfirmPaymentRequest, @Path("paymentIntentId") paymentIntentId: String
+        @Body request: ConfirmPaymentRequest,
+        @Path("paymentIntentId") paymentIntentId: String,
     ): Response<ConfirmPaymentResponse>
 
     @GET("/orders")
@@ -108,7 +107,6 @@ interface FoodApi {
     @PATCH("orders/{orderId}/status")
     suspend fun updateOrderStatus(
         @Path("orderId") orderId: String,
-        @Body map: Map<String, String>
+        @Body map: Map<String, String>,
     ): Response<GenericMsgResponse>
-
 }

@@ -23,7 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class CourseWorkNotificationManager @Inject constructor(
     private val foodApi: FoodApi,
-    @ApplicationContext val context: Context
+    @ApplicationContext val context: Context,
 ) {
     private val notificationManager = NotificationManagerCompat.from(context)
     private val job = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -32,20 +32,20 @@ class CourseWorkNotificationManager @Inject constructor(
         val id: String,
         val channelName: String,
         val channelDesc: String,
-        val importance: Int
+        val importance: Int,
     ) {
         ORDER("1", "Order", "Order", NotificationManager.IMPORTANCE_HIGH),
         PROMOTION("2", "Promotion", "Promotion", NotificationManager.IMPORTANCE_DEFAULT),
-        ACCOUNT("3", "Account", "Account", NotificationManager.IMPORTANCE_LOW)
+        ACCOUNT("3", "Account", "Account", NotificationManager.IMPORTANCE_LOW),
     }
-
 
     fun createChannels() {
         NotificationChannelType.entries.forEach {
-            val channel = NotificationChannelCompat.Builder(it.id, it.importance)
-                .setDescription(it.channelDesc)
-                .setName(it.channelName)
-                .build()
+            val channel =
+                NotificationChannelCompat.Builder(it.id, it.importance)
+                    .setDescription(it.channelDesc)
+                    .setName(it.channelName)
+                    .build()
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -61,45 +61,30 @@ class CourseWorkNotificationManager @Inject constructor(
     fun updateToken(token: String) {
         job.launch {
             val res = safeApiCall { foodApi.updateToken(FCMRequest(token)) }
-            if(res is  ApiResponse.Success){
+            if (res is ApiResponse.Success) {
                 Log.d("FCM_REQUEST", "${res.data.message}")
-            }else{
-                Log.d("FCM_REQUEST", "FAILED ${res}")
+            } else {
+                Log.d("FCM_REQUEST", "FAILED $res")
             }
         }
     }
 
     fun showNotification(
-        title:String,
-        message:String,
-        notificationID:Int,
-        intent:PendingIntent,
-        notificationChannelType: NotificationChannelType
-    ){
+        title: String,
+        message: String,
+        notificationID: Int,
+        intent: PendingIntent,
+        notificationChannelType: NotificationChannelType,
+    ) {
+        val notification =
+            NotificationCompat.Builder(context, notificationChannelType.id)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentIntent(intent)
+                .setAutoCancel(true)
+                .build()
 
-        val notification = NotificationCompat.Builder(context,notificationChannelType.id)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentIntent(intent)
-            .setAutoCancel(true)
-            .build()
-
-        notificationManager.notify(notificationID,notification)
+        notificationManager.notify(notificationID, notification)
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

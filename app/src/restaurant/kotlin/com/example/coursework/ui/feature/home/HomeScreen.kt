@@ -21,15 +21,14 @@ import com.example.coursework.ui.features.notifications.LoadingScreen
 
 @Composable
 fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
-
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+        Modifier
+            .fillMaxSize(),
     ) {
         when (uiState.value) {
-
             is HomeViewModel.HomeScreenState.Loading -> {
                 LoadingScreen()
             }
@@ -39,15 +38,17 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                 AsyncImage(
                     model = restaurant.imageUrl,
                     contentDescription = null,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .height(120.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
                 )
                 Column(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
                 ) {
                     Text(text = restaurant.name, style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.padding(8.dp))
@@ -65,5 +66,4 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
             }
         }
     }
-
 }

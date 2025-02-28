@@ -20,13 +20,13 @@ fun OrderSuccess(orderID: String, navController: NavController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
     ) {
         Text(text = "Успешный заказ", style = MaterialTheme.typography.titleMedium)
         Text(
             text = "ID Заказа: $orderID",
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = Color.Gray,
         )
         Button(onClick = {
             navController.popBackStack(route = Home, inclusive = false)

@@ -52,24 +52,24 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.coursework.data.FoodApi
 import com.example.coursework.data.CourseWorkSession
+import com.example.coursework.data.FoodApi
 import com.example.coursework.data.models.FoodItem
 import com.example.coursework.ui.feature.add_address.AddAddressScreen
 import com.example.coursework.ui.feature.address_list.AddressListScreen
 import com.example.coursework.ui.feature.cart.CartScreen
-import com.example.coursework.ui.features.auth.AuthScreen
-import com.example.coursework.ui.features.auth.login.SignInScreen
-import com.example.coursework.ui.features.auth.signup.SignUpScreen
 import com.example.coursework.ui.feature.cart.CartViewModel
 import com.example.coursework.ui.feature.food_item_details.FoodDetailsScreen
 import com.example.coursework.ui.feature.home.HomeScreen
-import com.example.coursework.ui.features.notifications.NotificationsList
-import com.example.coursework.ui.features.notifications.NotificationsViewModel
 import com.example.coursework.ui.feature.order_details.OrderDetailsScreen
 import com.example.coursework.ui.feature.order_success.OrderSuccess
-import com.example.coursework.ui.feature.restaurant_details.RestaurantDetailsScreen
 import com.example.coursework.ui.feature.orders.OrderListScreen
+import com.example.coursework.ui.feature.restaurant_details.RestaurantDetailsScreen
+import com.example.coursework.ui.features.auth.AuthScreen
+import com.example.coursework.ui.features.auth.login.SignInScreen
+import com.example.coursework.ui.features.auth.signup.SignUpScreen
+import com.example.coursework.ui.features.notifications.NotificationsList
+import com.example.coursework.ui.features.notifications.NotificationsViewModel
 import com.example.coursework.ui.navigation.AddAddress
 import com.example.coursework.ui.navigation.AddressList
 import com.example.coursework.ui.navigation.AuthScreen
@@ -106,19 +106,18 @@ class MainActivity : BaseCourseWorkActivity() {
     @Inject
     lateinit var session: CourseWorkSession
 
-
     sealed class BottomNavItem(val route: NavRoute, val icon: Int) {
         object Home : BottomNavItem(com.example.coursework.ui.navigation.Home, R.drawable.ic_home)
         object Cart : BottomNavItem(com.example.coursework.ui.navigation.Cart, R.drawable.ic_cart)
         object Notification :
             BottomNavItem(
                 com.example.coursework.ui.navigation.Notification,
-                R.drawable.ic_notification
+                R.drawable.ic_notification,
             )
 
         object Orders : BottomNavItem(
             OrderList,
-            R.drawable.ic_orders
+            R.drawable.ic_orders,
         )
     }
 
@@ -129,18 +128,20 @@ class MainActivity : BaseCourseWorkActivity() {
                 showSplashScreen
             }
             setOnExitAnimationListener { screen ->
-                val zoomX = ObjectAnimator.ofFloat(
-                    screen.iconView,
-                    View.SCALE_X,
-                    0.5f,
-                    0f
-                )
-                val zoomY = ObjectAnimator.ofFloat(
-                    screen.iconView,
-                    View.SCALE_Y,
-                    0.5f,
-                    0f
-                )
+                val zoomX =
+                    ObjectAnimator.ofFloat(
+                        screen.iconView,
+                        View.SCALE_X,
+                        0.5f,
+                        0f,
+                    )
+                val zoomY =
+                    ObjectAnimator.ofFloat(
+                        screen.iconView,
+                        View.SCALE_Y,
+                        0.5f,
+                        0f,
+                    )
                 zoomX.duration = 500
                 zoomY.duration = 500
                 zoomX.interpolator = OvershootInterpolator()
@@ -159,16 +160,17 @@ class MainActivity : BaseCourseWorkActivity() {
         enableEdgeToEdge()
         setContent {
             CourseWorkTheme {
-
-                val shouldShowBottomNav = remember {
-                    mutableStateOf(false)
-                }
-                val navItems = listOf(
-                    BottomNavItem.Home,
-                    BottomNavItem.Cart,
-                    BottomNavItem.Notification,
-                    BottomNavItem.Orders
-                )
+                val shouldShowBottomNav =
+                    remember {
+                        mutableStateOf(false)
+                    }
+                val navItems =
+                    listOf(
+                        BottomNavItem.Home,
+                        BottomNavItem.Cart,
+                        BottomNavItem.Notification,
+                        BottomNavItem.Orders,
+                    )
                 val navController = rememberNavController()
                 val cartViewModel: CartViewModel = hiltViewModel()
                 val cartItemSize = cartViewModel.cartItemCount.collectAsStateWithLifecycle()
@@ -184,13 +186,14 @@ class MainActivity : BaseCourseWorkActivity() {
                         }
                     }
                 }
-                Scaffold(modifier = Modifier.fillMaxSize(),
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
                     bottomBar = {
                         val currentRoute =
                             navController.currentBackStackEntryAsState().value?.destination
                         AnimatedVisibility(visible = shouldShowBottomNav.value) {
                             NavigationBar(
-                                containerColor = Color.White
+                                containerColor = Color.White,
                             ) {
                                 navItems.forEach { item ->
                                     val selected =
@@ -207,21 +210,23 @@ class MainActivity : BaseCourseWorkActivity() {
                                                     painter = painterResource(id = item.icon),
                                                     contentDescription = null,
                                                     tint = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
-                                                    modifier = Modifier.align(Center)
+                                                    modifier = Modifier.align(Center),
                                                 )
 
                                                 if (item.route == Cart && cartItemSize.value > 0) {
-                                                   ItemCount(cartItemSize.value)
+                                                    ItemCount(cartItemSize.value)
                                                 }
-                                                if(item.route == Notification && unreadCount.value > 0) {
+                                                if (item.route == Notification && unreadCount.value > 0) {
                                                     ItemCount(unreadCount.value)
                                                 }
                                             }
-                                        })
+                                        },
+                                    )
                                 }
                             }
                         }
-                    }) { innerPadding ->
+                    },
+                ) { innerPadding ->
 
                     SharedTransitionLayout {
                         NavHost(
@@ -231,27 +236,27 @@ class MainActivity : BaseCourseWorkActivity() {
                             enterTransition = {
                                 slideIntoContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                                    animationSpec = tween(300)
+                                    animationSpec = tween(300),
                                 ) + fadeIn(animationSpec = tween(300))
                             },
                             exitTransition = {
                                 slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                                    animationSpec = tween(300)
+                                    animationSpec = tween(300),
                                 ) + fadeOut(animationSpec = tween(300))
                             },
                             popEnterTransition = {
                                 slideIntoContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                                    animationSpec = tween(300)
+                                    animationSpec = tween(300),
                                 ) + fadeIn(animationSpec = tween(300))
                             },
                             popExitTransition = {
                                 slideOutOfContainer(
                                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                                    animationSpec = tween(300)
+                                    animationSpec = tween(300),
                                 ) + fadeOut(animationSpec = tween(300))
-                            }
+                            },
                         ) {
                             composable<SignUp> {
                                 shouldShowBottomNav.value = false
@@ -277,11 +282,11 @@ class MainActivity : BaseCourseWorkActivity() {
                                     name = route.restaurantName,
                                     imageUrl = route.restaurantImageUrl,
                                     restaurantID = route.restaurantId,
-                                    this
+                                    this,
                                 )
                             }
                             composable<FoodDetails>(
-                                typeMap = mapOf(typeOf<FoodItem>() to foodItemNavType)
+                                typeMap = mapOf(typeOf<FoodItem>() to foodItemNavType),
                             ) {
                                 shouldShowBottomNav.value = false
                                 val route = it.toRoute<FoodDetails>()
@@ -289,11 +294,11 @@ class MainActivity : BaseCourseWorkActivity() {
                                     navController,
                                     foodItem = route.foodItem,
                                     this,
-                                    onItemAddedToCart = { cartViewModel.getCart() }
+                                    onItemAddedToCart = { cartViewModel.getCart() },
                                 )
                             }
 
-                            composable<Cart>() {
+                            composable<Cart> {
                                 shouldShowBottomNav.value = true
                                 CartScreen(navController, cartViewModel)
                             }
@@ -328,10 +333,8 @@ class MainActivity : BaseCourseWorkActivity() {
                                 val orderID = it.toRoute<OrderDetails>().orderId
                                 OrderDetailsScreen(navController, orderID)
                             }
-
                         }
                     }
-
                 }
             }
         }
@@ -350,26 +353,29 @@ class MainActivity : BaseCourseWorkActivity() {
 @Composable
 fun BoxScope.ItemCount(count: Int) {
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .size(16.dp)
             .clip(CircleShape)
             .background(Mustard)
-            .align(Alignment.TopEnd)
+            .align(Alignment.TopEnd),
     ) {
         Text(
-            text = "${count}",
-            modifier = Modifier
+            text = "$count",
+            modifier =
+            Modifier
                 .align(Center),
             color = Color.White,
-            style = TextStyle(fontSize = 10.sp)
+            style = TextStyle(fontSize = 10.sp),
         )
     }
 }
+
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier,
     )
 }
 

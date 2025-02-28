@@ -1,6 +1,5 @@
 package com.example.coursework.ui.feature.order_details
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.coursework.data.FoodApi
@@ -18,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrderDetailsViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
-
     val listOfStatus = OrdersUtils.OrderStatus.entries.map { it.name }
 
     private val _uiState = MutableStateFlow<OrderDetailsUiState>(OrderDetailsUiState.Loading)

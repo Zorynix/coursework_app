@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.coursework.ui.feature.cart.AddressCard
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -44,14 +43,9 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
-
 
 @Composable
-fun AddAddressScreen(
-    navController: NavController, viewModel: AddAddressViewModel = hiltViewModel()
-) {
-
+fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewModel = hiltViewModel(),) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = true) {
@@ -61,21 +55,22 @@ fun AddAddressScreen(
                     Toast.makeText(
                         navController.context,
                         "Адрес добавлен успешно",
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
-                    
+
                     navController.previousBackStackEntry?.savedStateHandle?.set(
                         "isAddressAdded",
-                        true
+                        true,
                     )
                     navController.popBackStack()
                 }
             }
         }
     }
-    val isPermissionGranted = remember {
-        mutableStateOf(false)
-    }
+    val isPermissionGranted =
+        remember {
+            mutableStateOf(false)
+        }
     RequestLocationPermission(onPermissionGranted = {
         isPermissionGranted.value = true
         viewModel.getLocation()
@@ -87,10 +82,9 @@ fun AddAddressScreen(
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CircularProgressIndicator()
-
         }
     } else {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -100,11 +94,11 @@ fun AddAddressScreen(
                 LaunchedEffect(key1 = Unit) {
                     cameraState.position =
                         CameraPosition.fromLatLngZoom(LatLng(it.latitude, it.longitude), 13f)
-
                 }
-                val centerScreenMarker = remember {
-                    mutableStateOf(LatLng(it.latitude, it.longitude))
-                }
+                val centerScreenMarker =
+                    remember {
+                        mutableStateOf(LatLng(it.latitude, it.longitude))
+                    }
                 LaunchedEffect(key1 = cameraState) {
                     snapshotFlow {
                         cameraState.position.target
@@ -113,7 +107,7 @@ fun AddAddressScreen(
                         if (!cameraState.isMoving) {
                             viewModel.reverseGeocode(
                                 centerScreenMarker.value.latitude,
-                                centerScreenMarker.value.longitude
+                                centerScreenMarker.value.longitude,
                             )
                         }
                     }
@@ -121,39 +115,42 @@ fun AddAddressScreen(
                 GoogleMap(
                     cameraPositionState = cameraState,
                     modifier = Modifier.fillMaxSize(),
-                    uiSettings = MapUiSettings(
+                    uiSettings =
+                    MapUiSettings(
                         zoomControlsEnabled = true,
                         myLocationButtonEnabled = true,
-                        compassEnabled = true
+                        compassEnabled = true,
                     ),
-                    properties = MapProperties(
-                        isMyLocationEnabled = true
-                    )
+                    properties =
+                    MapProperties(
+                        isMyLocationEnabled = true,
+                    ),
                 ) {
                     centerScreenMarker.value.let {
                         Marker(
-                            state = MarkerState(
-                                position = LatLng(it.latitude, it.longitude)
-                            )
+                            state =
+                            MarkerState(
+                                position = LatLng(it.latitude, it.longitude),
+                            ),
                         )
                     }
                 }
                 val address = viewModel.address.collectAsStateWithLifecycle()
                 address.value?.let {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .shadow(8.dp)
-                        .clip(
-                            RoundedCornerShape(8.dp)
-                        )
-                        .background(Color.White)
-                        .clickable { }
-                        .padding(16.dp)
-                        .align(Alignment.BottomCenter)
-
+                    Box(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .shadow(8.dp)
+                            .clip(
+                                RoundedCornerShape(8.dp),
+                            )
+                            .background(Color.White)
+                            .clickable { }
+                            .padding(16.dp)
+                            .align(Alignment.BottomCenter),
                     ) {
-
                         Row(modifier = Modifier.fillMaxWidth()) {
                             Column {
                                 if (uiState.value is AddAddressViewModel.AddAddressState.AddressStoring) {
@@ -161,18 +158,18 @@ fun AddAddressScreen(
                                 } else if (uiState.value is AddAddressViewModel.AddAddressState.Error) {
                                     Text(
                                         text = (uiState.value as AddAddressViewModel.AddAddressState.Error).message,
-                                        style = MaterialTheme.typography.titleMedium
+                                        style = MaterialTheme.typography.titleMedium,
                                     )
                                 } else {
                                     Text(
                                         text = it.addressLine1,
-                                        style = MaterialTheme.typography.titleMedium
+                                        style = MaterialTheme.typography.titleMedium,
                                     )
                                     Spacer(modifier = Modifier.size(4.dp))
                                     Text(
                                         text = "${it.city}, ${it.state}, ${it.country}",
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = Color.Gray
+                                        color = Color.Gray,
                                     )
                                 }
                             }
@@ -181,28 +178,27 @@ fun AddAddressScreen(
                             }
                         }
                     }
-
                 }
             }
         }
     }
 }
 
-
 @Composable
 fun RequestLocationPermission(onPermissionGranted: () -> Unit, onPermissionRejected: () -> Unit) {
     val context = LocalContext.current
     if (context.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED && context.checkSelfPermission(
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
         ) == android.content.pm.PackageManager.PERMISSION_GRANTED
     ) {
         onPermissionGranted()
         return
     }
-    val permission = listOf(
-        android.Manifest.permission.ACCESS_FINE_LOCATION,
-        android.Manifest.permission.ACCESS_COARSE_LOCATION
-    )
+    val permission =
+        listOf(
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) { result ->
             if (result.values.all { it }) {
@@ -215,13 +211,3 @@ fun RequestLocationPermission(onPermissionGranted: () -> Unit, onPermissionRejec
         permissionLauncher.launch(permission.toTypedArray())
     }
 }
-
-
-
-
-
-
-
-
-
-

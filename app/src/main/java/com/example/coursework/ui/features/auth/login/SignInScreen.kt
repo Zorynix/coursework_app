@@ -59,13 +59,12 @@ import com.example.coursework.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     navController: NavController,
     isCutomer: Boolean = true,
-    viewModel: SignInViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel(),
 ) {
     val email = viewModel.email.collectAsStateWithLifecycle()
     val password = viewModel.password.collectAsStateWithLifecycle()
@@ -75,18 +74,16 @@ fun SignInScreen(
     val scope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
     LaunchedEffect(errorMessage.value) {
-        if (errorMessage.value != null)
+        if (errorMessage.value != null) {
             scope.launch {
                 showDialog = true
             }
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
-
         val uiState = viewModel.uiState.collectAsState()
         when (uiState.value) {
-
             is SignInViewModel.SignInEvent.Error -> {
                 // show error
                 loading.value = false
@@ -126,20 +123,21 @@ fun SignInScreen(
             painter = painterResource(id = R.drawable.ic_auth_bg),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
         ) {
             Box(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(id = R.string.sign_in),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.size(20.dp))
             CourseWorkTextField(
@@ -148,7 +146,7 @@ fun SignInScreen(
                 label = {
                     Text(text = stringResource(id = R.string.email), color = Color.Gray)
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             CourseWorkTextField(
                 value = password.value,
@@ -162,54 +160,55 @@ fun SignInScreen(
                     Image(
                         painter = painterResource(id = R.drawable.ic_eye),
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     )
-                }
+                },
             )
             Spacer(modifier = Modifier.size(16.dp))
             Text(text = errorMessage.value ?: "", color = Color.Red)
             Button(
-                onClick = viewModel::onSignInClick, modifier = Modifier.height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                onClick = viewModel::onSignInClick,
+                modifier = Modifier.height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Primary),
             ) {
                 Box {
-                    AnimatedContent(targetState = loading.value,
+                    AnimatedContent(
+                        targetState = loading.value,
                         transitionSpec = {
                             fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.8f) togetherWith
-                                    fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.8f)
-                        }
+                                fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.8f)
+                        },
                     ) { target ->
                         if (target) {
                             CircularProgressIndicator(
                                 color = Color.White,
-                                modifier = Modifier
+                                modifier =
+                                Modifier
                                     .padding(horizontal = 32.dp)
-                                    .size(24.dp)
+                                    .size(24.dp),
                             )
                         } else {
                             Text(
                                 text = stringResource(id = R.string.sign_in),
                                 color = Color.White,
-                                modifier = Modifier.padding(horizontal = 32.dp)
+                                modifier = Modifier.padding(horizontal = 32.dp),
                             )
                         }
-
                     }
-
-
                 }
             }
             Spacer(modifier = Modifier.size(16.dp))
-            if(isCutomer) {
+            if (isCutomer) {
                 Text(
                     text = stringResource(id = R.string.dont_have_account),
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .padding(8.dp)
                         .clickable {
                             viewModel.onSignUpClicked()
                         }
                         .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 val context = LocalContext.current
                 GroupSocialButtons(
@@ -229,7 +228,7 @@ fun SignInScreen(
                         sheetState.hide()
                         showDialog = false
                     }
-                }
+                },
             )
         }
     }

@@ -6,5 +6,5 @@ data class ConfirmPaymentResponse(
     val orderId: String,
     val orderStatus: String,
     val requiresAction: Boolean,
-    val status: String
+    val status: String,
 )

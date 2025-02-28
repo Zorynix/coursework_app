@@ -11,5 +11,5 @@ data class FoodItem(
     val imageUrl: String,
     val name: String,
     val price: Double,
-    val restaurantId: String
+    val restaurantId: String,
 )

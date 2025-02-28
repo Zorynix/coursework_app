@@ -1,6 +1,5 @@
 package com.example.coursework.ui.feature.food_item_details
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -10,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,25 +43,27 @@ import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
- fun SharedTransitionScope.FoodDetailsScreen(
+fun SharedTransitionScope.FoodDetailsScreen(
     navController: NavController,
     foodItem: FoodItem,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onItemAddedToCart: () -> Unit,
-    viewModel: FoodDetailsViewModel = hiltViewModel()
+    viewModel: FoodDetailsViewModel = hiltViewModel(),
 ) {
-
-    val showSuccessDialog = remember {
-        mutableStateOf(false)
-    }
-    val showErrorDialog = remember {
-        mutableStateOf(false)
-    }
+    val showSuccessDialog =
+        remember {
+            mutableStateOf(false)
+        }
+    val showErrorDialog =
+        remember {
+            mutableStateOf(false)
+        }
     val count = viewModel.quantity.collectAsStateWithLifecycle()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val isLoading = remember {
-        mutableStateOf(false)
-    }
+    val isLoading =
+        remember {
+            mutableStateOf(false)
+        }
 
     when (uiState.value) {
         FoodDetailsViewModel.FoodDetailsUiState.Loading -> {
@@ -97,66 +96,75 @@ import kotlinx.coroutines.flow.collectLatest
     }
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
     ) {
-        RestaurantDetailsHeader(imageUrl = foodItem.imageUrl,
+        RestaurantDetailsHeader(
+            imageUrl = foodItem.imageUrl,
             restaurantID = foodItem.id,
             animatedVisibilityScope = animatedVisibilityScope,
             onBackButton = {
                 navController.popBackStack()
-            }) {}
+            },
+        ) {}
         RestaurantDetails(
             title = foodItem.name,
             description = foodItem.description,
             restaurantID = foodItem.id,
-            animatedVisibilityScope = animatedVisibilityScope
+            animatedVisibilityScope = animatedVisibilityScope,
         )
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Text(
                 text = "$ ${foodItem.price}",
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineLarge
+                style = MaterialTheme.typography.headlineLarge,
             )
             Spacer(modifier = Modifier.weight(1f))
-            FoodItemCounter(onCounterIncrement = {
-                viewModel.incrementQuantity()
-            }, onCounterDecrement = {
-                viewModel.decrementQuantity()
-            }, count = count.value
+            FoodItemCounter(
+                onCounterIncrement = {
+                    viewModel.incrementQuantity()
+                },
+                onCounterDecrement = {
+                    viewModel.decrementQuantity()
+                },
+                count = count.value,
             )
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
                 viewModel.addToCart(
-                    restaurantId = foodItem.restaurantId, foodItemId = foodItem.id
+                    restaurantId = foodItem.restaurantId,
+                    foodItemId = foodItem.id,
                 )
-            }, enabled = !isLoading.value, modifier = Modifier.padding(8.dp)
+            },
+            enabled = !isLoading.value,
+            modifier = Modifier.padding(8.dp),
         ) {
             Row(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .background(MaterialTheme.colorScheme.primary)
                     .padding(horizontal = 8.dp)
                     .clip(RoundedCornerShape(32.dp)),
-                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             ) {
                 AnimatedVisibility(visible = !isLoading.value) {
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.cart),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
                             text = "Добаить в корзину".uppercase(),
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
-
                 }
                 AnimatedVisibility(visible = isLoading.value) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp))
@@ -168,21 +176,25 @@ import kotlinx.coroutines.flow.collectLatest
     if (showSuccessDialog.value) {
         ModalBottomSheet(onDismissRequest = { showSuccessDialog.value = false }) {
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
             ) {
                 Text(
-                    text = "Блюдо добавлено в корзину", style = MaterialTheme.typography.titleLarge
+                    text = "Блюдо добавлено в корзину",
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Button(
                     onClick = {
                         showSuccessDialog.value = false
                         viewModel.goToCart()
-                    }, modifier = Modifier
+                    },
+                    modifier =
+                    Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Text(text = "В корзину")
                 }
@@ -190,13 +202,14 @@ import kotlinx.coroutines.flow.collectLatest
                 Button(
                     onClick = {
                         showSuccessDialog.value = false
-                    }, modifier = Modifier
+                    },
+                    modifier =
+                    Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Text(text = "Продолжить")
                 }
-
             }
         }
     }
@@ -204,36 +217,37 @@ import kotlinx.coroutines.flow.collectLatest
         ModalBottomSheet(onDismissRequest = { showSuccessDialog.value = false }) {
             BasicDialog(
                 title = "Error",
-                description = (uiState.value as? FoodDetailsViewModel.FoodDetailsUiState.Error)?.message
-                    ?: "Не удалось добавить в корзину"
+                description =
+                (uiState.value as? FoodDetailsViewModel.FoodDetailsUiState.Error)?.message
+                    ?: "Не удалось добавить в корзину",
             ) {
                 showErrorDialog.value = false
             }
         }
     }
-
 }
-
 
 @Composable
 fun FoodItemCounter(onCounterIncrement: () -> Unit, onCounterDecrement: () -> Unit, count: Int) {
     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-        Image(painter = painterResource(id = R.drawable.add),
+        Image(
+            painter = painterResource(id = R.drawable.add),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .clip(CircleShape)
-                .clickable { onCounterIncrement.invoke() })
+                .clickable { onCounterIncrement.invoke() },
+        )
         Spacer(modifier = Modifier.size(8.dp))
-        Text(text = "${count}", style = MaterialTheme.typography.titleMedium)
+        Text(text = "$count", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.size(8.dp))
-        Image(painter = painterResource(id = R.drawable.minus),
+        Image(
+            painter = painterResource(id = R.drawable.minus),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .clip(CircleShape)
-                .clickable { onCounterDecrement.invoke() })
-
+                .clickable { onCounterDecrement.invoke() },
+        )
     }
 }
-
-
-

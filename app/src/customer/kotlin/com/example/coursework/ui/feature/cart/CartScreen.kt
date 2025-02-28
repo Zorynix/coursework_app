@@ -1,6 +1,5 @@
 package com.example.coursework.ui.feature.cart
 
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,7 +38,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
@@ -62,15 +60,16 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun CartScreen(navController: NavController, viewModel: CartViewModel) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    val showErrorDialog = remember {
-        mutableStateOf(
-            false
-        )
-    }
+    val showErrorDialog =
+        remember {
+            mutableStateOf(
+                false,
+            )
+        }
     val address =
         navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<Address?>(
             "address",
-            null
+            null,
         )
             ?.collectAsStateWithLifecycle()
 
@@ -80,19 +79,21 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel) {
         }
     }
 
-    val paymentSheet = rememberPaymentSheet(paymentResultCallback = {
-        if (it is PaymentSheetResult.Completed) {
-            viewModel.onPaymentSuccess()
-        } else {
-            viewModel.onPaymentFailed()
-        }
-    })
+    val paymentSheet =
+        rememberPaymentSheet(paymentResultCallback = {
+            if (it is PaymentSheetResult.Completed) {
+                viewModel.onPaymentSuccess()
+            } else {
+                viewModel.onPaymentFailed()
+            }
+        })
     LaunchedEffect(key1 = true) {
         viewModel.event.collectLatest {
             when (it) {
                 is CartViewModel.CartEvent.onItemRemoveError,
                 is CartViewModel.CartEvent.onQuantityUpdateError,
-                is CartViewModel.CartEvent.showErrorDialog -> {
+                is CartViewModel.CartEvent.showErrorDialog,
+                -> {
                     showErrorDialog.value = true
                 }
 
@@ -106,34 +107,36 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel) {
 
                 is CartViewModel.CartEvent.OnInitiatePayment -> {
                     PaymentConfiguration.init(navController.context, it.data.publishableKey)
-                    val customer = PaymentSheet.CustomerConfiguration(
-                        it.data.customerId,
-                        it.data.ephemeralKeySecret
-                    )
-                    val paymentSheetConfig = PaymentSheet.Configuration(
-                        merchantDisplayName = "CourseWork",
-                        customer = customer,
-                        allowsDelayedPaymentMethods = false,
-                    )
+                    val customer =
+                        PaymentSheet.CustomerConfiguration(
+                            it.data.customerId,
+                            it.data.ephemeralKeySecret,
+                        )
+                    val paymentSheetConfig =
+                        PaymentSheet.Configuration(
+                            merchantDisplayName = "CourseWork",
+                            customer = customer,
+                            allowsDelayedPaymentMethods = false,
+                        )
 
                     // Initiate payment
 
                     paymentSheet.presentWithPaymentIntent(
                         it.data.paymentIntentClientSecret,
-                        paymentSheetConfig
+                        paymentSheetConfig,
                     )
                 }
 
                 else -> {
-
                 }
             }
         }
     }
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         CartHeaderView(onBack = { navController.popBackStack() })
         Spacer(modifier = Modifier.size(16.dp))
@@ -143,14 +146,14 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Spacer(modifier = Modifier.size(16.dp))
                     CircularProgressIndicator()
                     Text(
                         text = "Загрузка",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = Color.Gray,
                     )
                 }
             }
@@ -176,35 +179,33 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_cart),
                             contentDescription = null,
-                            tint = Color.Gray
+                            tint = Color.Gray,
                         )
                         Text(
                             text = "Корзина пуста",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray
+                            color = Color.Gray,
                         )
                     }
                 }
             }
 
-
             is CartViewModel.CartUiState.Error -> {
                 Column(
                     Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     val message = (uiState.value as CartViewModel.CartUiState.Error).message
                     Text(text = message, style = MaterialTheme.typography.bodyMedium)
                     Button(onClick = { /*TODO*/ }) {
                         Text(text = "Обновить")
                     }
-
                 }
             }
 
@@ -219,12 +220,11 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel) {
             Button(
                 onClick = { viewModel.checkout() },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = selectedAddress.value != null
+                enabled = selectedAddress.value != null,
             ) {
                 Text(text = "Заказать")
             }
         }
-
     }
 
     if (showErrorDialog.value) {
@@ -234,23 +234,22 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel) {
             }
         }
     }
-
 }
 
 @Composable
 fun AddressCard(address: Address?, onAddressClicked: () -> Unit) {
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .shadow(8.dp)
             .clip(
-                RoundedCornerShape(8.dp)
+                RoundedCornerShape(8.dp),
             )
             .background(Color.White)
             .clickable { onAddressClicked.invoke() }
-            .padding(16.dp)
-
+            .padding(16.dp),
     ) {
         if (address != null) {
             Column {
@@ -259,14 +258,13 @@ fun AddressCard(address: Address?, onAddressClicked: () -> Unit) {
                 Text(
                     text = "${address.city}, ${address.state}, ${address.country}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = Color.Gray,
                 )
             }
         } else {
             Text(text = "Выбрать адрес", style = MaterialTheme.typography.bodyMedium)
         }
     }
-
 }
 
 @Composable
@@ -275,7 +273,9 @@ fun CheckoutDetailsView(checkoutDetails: CheckoutDetails) {
         CheckoutRowItem(title = "Промежуточный итог", value = checkoutDetails.subTotal, currency = "USD")
         CheckoutRowItem(title = "НДС", value = checkoutDetails.tax, currency = "USD")
         CheckoutRowItem(
-            title = "Доставка", value = checkoutDetails.deliveryFee, currency = "USD"
+            title = "Доставка",
+            value = checkoutDetails.deliveryFee,
+            currency = "USD",
         )
         CheckoutRowItem(title = "Всего", value = checkoutDetails.totalAmount, currency = "USD")
     }
@@ -285,25 +285,25 @@ fun CheckoutDetailsView(checkoutDetails: CheckoutDetails) {
 fun CheckoutRowItem(title: String, value: Double, currency: String) {
     Column {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(vertical = 4.dp),
         ) {
             Text(text = title, style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = StringUtils.formatCurrency(value),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 text = currency,
                 style = MaterialTheme.typography.titleMedium,
-                color = Color.LightGray
+                color = Color.LightGray,
             )
         }
         VerticalDivider()
     }
-
 }
 
 @Composable
@@ -311,21 +311,23 @@ fun CartItemView(
     cartItem: CartItem,
     onIncrement: (CartItem, Int) -> Unit,
     onDecrement: (CartItem, Int) -> Unit,
-    onRemove: (CartItem) -> Unit
+    onRemove: (CartItem) -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         AsyncImage(
             model = cartItem.menuItemId.imageUrl,
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .size(82.dp)
                 .clip(RoundedCornerShape(12.dp)),
-            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
         )
         Spacer(modifier = Modifier.size(12.dp))
         Column(verticalArrangement = Arrangement.Center) {
@@ -333,7 +335,8 @@ fun CartItemView(
                 Text(text = cartItem.menuItemId.name, style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(
-                    onClick = { onRemove.invoke(cartItem) }, modifier = Modifier.size(24.dp)
+                    onClick = { onRemove.invoke(cartItem) },
+                    modifier = Modifier.size(24.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -347,19 +350,21 @@ fun CartItemView(
                 text = cartItem.menuItemId.description,
                 maxLines = 1,
                 color = Color.Gray,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
             )
             Spacer(modifier = Modifier.size(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "$${cartItem.menuItemId.price}",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                FoodItemCounter(count = cartItem.quantity,
+                FoodItemCounter(
+                    count = cartItem.quantity,
                     onCounterIncrement = { onIncrement.invoke(cartItem, cartItem.quantity) },
-                    onCounterDecrement = { onDecrement.invoke(cartItem, cartItem.quantity) })
+                    onCounterDecrement = { onDecrement.invoke(cartItem, cartItem.quantity) },
+                )
             }
         }
     }
@@ -367,17 +372,18 @@ fun CartItemView(
 
 @Composable
 fun CartHeaderView(onBack: () -> Unit) {
-
     Row(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(id = R.drawable.back),
-            modifier = Modifier
+            modifier =
+            Modifier
                 .shadow(12.dp, clip = true, shape = CircleShape)
                 .clip(CircleShape)
                 .clickable { onBack() },
@@ -386,5 +392,4 @@ fun CartHeaderView(onBack: () -> Unit) {
         Text(text = "Корзина", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.size(48.dp))
     }
-
 }

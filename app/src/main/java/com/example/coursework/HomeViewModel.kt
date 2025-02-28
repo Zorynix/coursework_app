@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor() : ViewModel() {
-
     private val _event = MutableSharedFlow<HomeEvent>()
     val event = _event.asSharedFlow()
 

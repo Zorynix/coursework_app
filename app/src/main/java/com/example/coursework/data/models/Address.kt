@@ -14,5 +14,5 @@ data class Address(
     val zipCode: String,
     val country: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
 ) : Parcelable

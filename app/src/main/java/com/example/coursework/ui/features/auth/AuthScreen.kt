@@ -59,20 +59,24 @@ import kotlinx.coroutines.launch
 fun AuthScreen(
     navController: NavController,
     isCustomer: Boolean = true,
-    viewModel: AuthScreenViewModel = hiltViewModel()
+    viewModel: AuthScreenViewModel = hiltViewModel(),
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
-    val imageSize = remember {
-        mutableStateOf(IntSize.Zero)
-    }
-    val brush = Brush.verticalGradient(
-        colors = listOf(
-            Color.Transparent, Color.Black
-        ),
-        startY = imageSize.value.height.toFloat() / 3,
-    )
+    val imageSize =
+        remember {
+            mutableStateOf(IntSize.Zero)
+        }
+    val brush =
+        Brush.verticalGradient(
+            colors =
+            listOf(
+                Color.Transparent,
+                Color.Black,
+            ),
+            startY = imageSize.value.height.toFloat() / 3,
+        )
     LaunchedEffect(true) {
         viewModel.navigationEvent.collectLatest { event ->
             when (event) {
@@ -96,73 +100,81 @@ fun AuthScreen(
     }
 
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color.Black),
     ) {
-        Image(painter = painterResource(id = R.drawable.background),
+        Image(
+            painter = painterResource(id = R.drawable.background),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .onGloballyPositioned {
                     imageSize.value = it.size
                 }
                 .alpha(0.6f),
-            contentScale = ContentScale.FillBounds)
+            contentScale = ContentScale.FillBounds,
+        )
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .matchParentSize()
-                .background(brush = brush)
+                .background(brush = brush),
         )
 
         Button(
             onClick = { /*TODO*/ },
             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(
-                    Alignment.TopEnd
+                    Alignment.TopEnd,
                 )
-                .padding(8.dp)
+                .padding(8.dp),
         ) {
             Text(text = stringResource(id = R.string.skip), color = Primary)
         }
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(top = 110.dp)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             BasicText(
                 text = stringResource(id = R.string.welcome),
                 modifier = Modifier.fillMaxWidth(),
-                style = TextStyle(
+                style =
+                TextStyle(
                     color = Color.Black,
                     fontSize = 45.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Bold,
+                ),
             )
             Text(
                 text = stringResource(id = R.string.course_work),
                 color = Primary,
                 modifier = Modifier,
                 fontSize = 50.sp,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
             )
             Text(
                 text = stringResource(id = R.string.food_desc),
                 color = Color.DarkGray,
                 fontSize = 20.sp,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp),
             )
-
         }
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (isCustomer) {
                 GroupSocialButtons(viewModel = viewModel)
@@ -174,7 +186,7 @@ fun AuthScreen(
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.2f)),
                     shape = RoundedCornerShape(32.dp),
-                    border = BorderStroke(1.dp, Color.White)
+                    border = BorderStroke(1.dp, Color.White),
                 ) {
                     Text(text = stringResource(id = R.string.sign_with_email), color = Color.White)
                 }
@@ -186,7 +198,6 @@ fun AuthScreen(
                 Text(text = stringResource(id = R.string.alread_have_account), color = Color.White)
             }
         }
-
     }
 
     if (showDialog) {
@@ -199,12 +210,11 @@ fun AuthScreen(
                         sheetState.hide()
                         showDialog = false
                     }
-                }
+                },
             )
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

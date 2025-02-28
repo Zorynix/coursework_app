@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FoodDetailsViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
-
     private val _uiState = MutableStateFlow<FoodDetailsUiState>(FoodDetailsUiState.Nothing)
     val uiState = _uiState.asStateFlow()
 
@@ -43,15 +42,16 @@ class FoodDetailsViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel
     fun addToCart(restaurantId: String, foodItemId: String) {
         viewModelScope.launch {
             _uiState.value = FoodDetailsUiState.Loading
-            val response = safeApiCall {
-                foodApi.addToCart(
-                    AddToCartRequest(
-                        restaurantId = restaurantId,
-                        menuItemId = foodItemId,
-                        quantity = quantity.value
+            val response =
+                safeApiCall {
+                    foodApi.addToCart(
+                        AddToCartRequest(
+                            restaurantId = restaurantId,
+                            menuItemId = foodItemId,
+                            quantity = quantity.value,
+                        ),
                     )
-                )
-            }
+                }
             when (response) {
                 is ApiResponse.Success -> {
                     _uiState.value = FoodDetailsUiState.Nothing

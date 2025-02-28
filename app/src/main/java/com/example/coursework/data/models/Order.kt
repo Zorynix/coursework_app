@@ -12,5 +12,5 @@ data class Order(
     val stripePaymentIntentId: String,
     val totalAmount: Double,
     val updatedAt: String,
-    val userId: String
+    val userId: String,
 )

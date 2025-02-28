@@ -31,12 +31,11 @@ import com.example.coursework.ui.feature.orders.OrderDetailsText
 import com.example.coursework.utils.StringUtils
 import kotlinx.coroutines.flow.collectLatest
 
-
 @Composable
 fun OrderDetailsScreen(
     navController: NavController,
     orderID: String,
-    viewModel: OrderDetailsViewModel = hiltViewModel()
+    viewModel: OrderDetailsViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(key1 = orderID) {
         viewModel.getOrderDetails(orderID)
@@ -52,17 +51,19 @@ fun OrderDetailsScreen(
         }
     }
 
-    Column() {
+    Column {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.back),
-                modifier = Modifier
+                modifier =
+                Modifier
                     .shadow(12.dp, clip = true, shape = CircleShape)
                     .clip(CircleShape)
                     .clickable {
@@ -79,7 +80,7 @@ fun OrderDetailsScreen(
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     CircularProgressIndicator()
                     Text(text = "Загрузка")
@@ -104,7 +105,7 @@ fun OrderDetailsScreen(
                     Image(
                         painter = painterResource(id = viewModel.getImage(order)),
                         contentDescription = null,
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(48.dp),
                     )
                     Text(text = "${order.status}")
                 }
@@ -113,7 +114,7 @@ fun OrderDetailsScreen(
             is OrderDetailsViewModel.OrderDetailsState.Error -> {
                 Column(
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(text = (uiState.value as OrderDetailsViewModel.OrderDetailsState.Error).message)
                     Button(onClick = { viewModel.getOrderDetails(orderID) }) {
@@ -122,7 +123,5 @@ fun OrderDetailsScreen(
                 }
             }
         }
-
-
     }
 }

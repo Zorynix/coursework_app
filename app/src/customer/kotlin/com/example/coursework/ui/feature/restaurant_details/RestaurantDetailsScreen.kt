@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,15 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,7 +44,6 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.coursework.R
 import com.example.coursework.data.models.FoodItem
-import com.example.coursework.data.models.Restaurant
 import com.example.coursework.ui.gridItems
 import com.example.coursework.ui.navigation.FoodDetails
 
@@ -62,7 +55,7 @@ fun SharedTransitionScope.RestaurantDetailsScreen(
     imageUrl: String,
     restaurantID: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    viewModel: RestaurantViewModel = hiltViewModel()
+    viewModel: RestaurantViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(restaurantID) {
         viewModel.getFoodItem(restaurantID)
@@ -70,18 +63,20 @@ fun SharedTransitionScope.RestaurantDetailsScreen(
     val uiState = viewModel.uiState.collectAsState()
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
-            RestaurantDetailsHeader(imageUrl = imageUrl,
+            RestaurantDetailsHeader(
+                imageUrl = imageUrl,
                 restaurantID = restaurantID,
                 animatedVisibilityScope = animatedVisibilityScope,
                 onBackButton = { navController.popBackStack() },
-                onFavoriteButton = { })
+                onFavoriteButton = { },
+            )
         }
         item {
             RestaurantDetails(
                 title = name,
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien fermentum aliquam. Nullam nec nunc nec libero fermentum aliquam. Nullam nec nunc nec libero fermentum aliquam.",
                 animatedVisibilityScope = animatedVisibilityScope,
-                restaurantID = restaurantID
+                restaurantID = restaurantID,
             )
         }
         when (uiState.value) {
@@ -90,7 +85,7 @@ fun SharedTransitionScope.RestaurantDetailsScreen(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         CircularProgressIndicator()
                         Text(text = "Загрузка")
@@ -105,7 +100,7 @@ fun SharedTransitionScope.RestaurantDetailsScreen(
                     gridItems(foodItems, 2) { foodItem ->
                         FoodItemView(footItem = foodItem, animatedVisibilityScope) {
                             navController.navigate(
-                                FoodDetails(foodItem)
+                                FoodDetails(foodItem),
                             )
                         }
                     }
@@ -114,7 +109,6 @@ fun SharedTransitionScope.RestaurantDetailsScreen(
                         Text(text = "Блюд не найдено")
                     }
                 }
-
             }
 
             is RestaurantViewModel.RestaurantEvent.Error -> {
@@ -131,21 +125,25 @@ fun SharedTransitionScope.RestaurantDetailsScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.RestaurantDetails(
-    title: String, description: String, restaurantID: String,
+    title: String,
+    description: String,
+    restaurantID: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.sharedElement(
-                state = rememberSharedContentState(key = "title/${restaurantID}"),
-                animatedVisibilityScope
-            )
+            modifier =
+            Modifier.sharedElement(
+                state = rememberSharedContentState(key = "title/$restaurantID"),
+                animatedVisibilityScope,
+            ),
         )
         Spacer(modifier = Modifier.size(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -153,35 +151,34 @@ fun SharedTransitionScope.RestaurantDetails(
                 imageVector = Icons.Filled.Star,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = "4.8",
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = "(50+)",
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically),
             )
             Spacer(modifier = Modifier.size(8.dp))
             TextButton(onClick = { /*TODO*/ }) {
                 Text(
                     text = " Показать все отзывы",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
-
         }
         Spacer(modifier = Modifier.size(8.dp))
         Text(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp),
         )
     }
 }
@@ -193,39 +190,46 @@ fun SharedTransitionScope.RestaurantDetailsHeader(
     restaurantID: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onBackButton: () -> Unit,
-    onFavoriteButton: () -> Unit
+    onFavoriteButton: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxWidth()) {
         AsyncImage(
-            model = imageUrl, contentDescription = null, modifier = Modifier
+            model = imageUrl,
+            contentDescription = null,
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .height(200.dp)
                 .sharedElement(
-                    state = rememberSharedContentState(key = "image/${restaurantID}"),
-                    animatedVisibilityScope
+                    state = rememberSharedContentState(key = "image/$restaurantID"),
+                    animatedVisibilityScope,
                 )
                 .clip(
-                    RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
-                ), contentScale = ContentScale.Crop
+                    RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp),
+                ),
+            contentScale = ContentScale.Crop,
         )
         IconButton(
             onClick = onBackButton,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(16.dp)
                 .size(48.dp)
-                .align(Alignment.TopStart)
+                .align(Alignment.TopStart),
         ) {
             Image(painter = painterResource(id = R.drawable.back), contentDescription = null)
         }
         IconButton(
             onClick = onFavoriteButton,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(16.dp)
                 .size(48.dp)
-                .align(Alignment.TopEnd)
+                .align(Alignment.TopEnd),
         ) {
             Image(
-                painter = painterResource(id = R.drawable.favorite), contentDescription = null
+                painter = painterResource(id = R.drawable.favorite),
+                contentDescription = null,
             )
         }
     }
@@ -236,10 +240,11 @@ fun SharedTransitionScope.RestaurantDetailsHeader(
 fun SharedTransitionScope.FoodItemView(
     footItem: FoodItem,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    onClick: (FoodItem) -> Unit
+    onClick: (FoodItem) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .padding(8.dp)
             .width(162.dp)
             .height(216.dp)
@@ -247,92 +252,103 @@ fun SharedTransitionScope.FoodItemView(
                 elevation = 16.dp,
                 shape = RoundedCornerShape(16.dp),
                 ambientColor = Color.Gray.copy(alpha = 0.8f),
-                spotColor = Color.Gray.copy(alpha = 0.8f)
+                spotColor = Color.Gray.copy(alpha = 0.8f),
             )
             .background(Color.White)
             .clickable { onClick.invoke(footItem) }
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp)),
     ) {
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
-                .height(147.dp)
+                .height(147.dp),
         ) {
             AsyncImage(
-                model = footItem.imageUrl, contentDescription = null,
-                modifier = Modifier
+                model = footItem.imageUrl,
+                contentDescription = null,
+                modifier =
+                Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(16.dp))
                     .sharedElement(
                         state = rememberSharedContentState(key = "image/${footItem.id}"),
-                        animatedVisibilityScope
+                        animatedVisibilityScope,
                     ),
                 contentScale = ContentScale.Crop,
             )
             Text(
                 text = "$${footItem.price}",
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(Color.White)
                     .padding(horizontal = 16.dp)
-                    .align(Alignment.TopStart)
+                    .align(Alignment.TopStart),
             )
             Image(
                 painter = painterResource(id = R.drawable.favorite),
                 contentDescription = null,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .size(28.dp)
                     .clip(CircleShape)
-                    .align(Alignment.TopEnd)
+                    .align(Alignment.TopEnd),
             )
 
-
             Row(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .align(Alignment.BottomStart)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color.White)
                     .padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "4.5", style = MaterialTheme.typography.titleSmall, maxLines = 1
+                    text = "4.5",
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Icon(
                     imageVector = Icons.Filled.Star,
                     contentDescription = null,
-                    modifier = Modifier.size(14.dp)
+                    modifier = Modifier.size(14.dp),
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     text = "(21)",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray,
-                    maxLines = 1
+                    maxLines = 1,
                 )
             }
         }
 
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(8.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Text(
-                text = footItem.name, style = MaterialTheme.typography.bodyMedium, maxLines = 1,
-                modifier = Modifier.sharedElement(
+                text = footItem.name,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                modifier =
+                Modifier.sharedElement(
                     state = rememberSharedContentState(key = "title/${footItem.id}"),
-                    animatedVisibilityScope
-                )
+                    animatedVisibilityScope,
+                ),
             )
             Text(
                 text = "${footItem.description}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray,
-                maxLines = 1
+                maxLines = 1,
             )
         }
     }

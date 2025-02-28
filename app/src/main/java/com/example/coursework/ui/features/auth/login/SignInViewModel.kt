@@ -15,14 +15,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     override val foodApi: FoodApi,
-    val session: CourseWorkSession
+    val session: CourseWorkSession,
 ) :
     BaseAuthViewModel(foodApi) {
-
     private val _uiState = MutableStateFlow<SignInEvent>(SignInEvent.Nothing)
     val uiState = _uiState.asStateFlow()
 
@@ -46,13 +44,15 @@ class SignInViewModel @Inject constructor(
     fun onSignInClick() {
         viewModelScope.launch {
             _uiState.value = SignInEvent.Loading
-            val response = safeApiCall {
-                foodApi.signIn(
-                    SignInRequest(
-                        email = email.value, password = password.value
+            val response =
+                safeApiCall {
+                    foodApi.signIn(
+                        SignInRequest(
+                            email = email.value,
+                            password = password.value,
+                        ),
                     )
-                )
-            }
+                }
             when (response) {
                 is ApiResponse.Success -> {
                     _uiState.value = SignInEvent.Success

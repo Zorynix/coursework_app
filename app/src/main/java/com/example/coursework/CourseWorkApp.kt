@@ -7,7 +7,6 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class CourseWorkApp : Application() {
-
     @Inject
     lateinit var courseWorkNotificationManager: CourseWorkNotificationManager
     override fun onCreate() {

@@ -1,9 +1,8 @@
 package com.example.coursework.ui.features.auth
 
-
 import androidx.lifecycle.viewModelScope
-import com.example.coursework.data.FoodApi
 import com.example.coursework.data.CourseWorkSession
+import com.example.coursework.data.FoodApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,16 +14,14 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthScreenViewModel @Inject constructor(
     override val foodApi: FoodApi,
-    val session: CourseWorkSession
+    val session: CourseWorkSession,
 ) :
     BaseAuthViewModel(foodApi) {
-
     private val _uiState = MutableStateFlow<AuthEvent>(AuthEvent.Nothing)
     val uiState = _uiState.asStateFlow()
 
     private val _navigationEvent = MutableSharedFlow<AuthNavigationEvent>()
     val navigationEvent = _navigationEvent.asSharedFlow()
-
 
     sealed class AuthNavigationEvent {
         object NavigateToSignUp : AuthNavigationEvent()

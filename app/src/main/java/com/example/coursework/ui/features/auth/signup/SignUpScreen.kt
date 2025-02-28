@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.coursework.R
 import com.example.coursework.ui.BasicDialog
+import com.example.coursework.ui.CourseWorkPasswordTextField
 import com.example.coursework.ui.CourseWorkTextField
 import com.example.coursework.ui.GroupSocialButtons
 import com.example.coursework.ui.navigation.AuthScreen
@@ -58,7 +58,6 @@ import com.example.coursework.ui.navigation.Login
 import com.example.coursework.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,17 +71,15 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
     val scope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
     LaunchedEffect(errorMessage.value) {
-        if (errorMessage.value != null)
+        if (errorMessage.value != null) {
             scope.launch {
                 showDialog = true
             }
+        }
     }
     Box(modifier = Modifier.fillMaxSize()) {
-
-
         val uiState = viewModel.uiState.collectAsState()
         when (uiState.value) {
-
             is SignUpViewModel.SignupEvent.Error -> {
                 // show error
                 loading.value = false
@@ -122,28 +119,30 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
             painter = painterResource(id = R.drawable.ic_auth_bg),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
         )
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
         ) {
             Box(modifier = Modifier.weight(1f))
             Text(
                 text = stringResource(id = R.string.sign_up),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.size(20.dp))
             CourseWorkTextField(
-                value = name.value, onValueChange = { viewModel.onNameChange(it) },
+                value = name.value,
+                onValueChange = { viewModel.onNameChange(it) },
                 label = {
                     Text(text = stringResource(id = R.string.full_name), color = Color.Gray)
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             CourseWorkTextField(
                 value = email.value,
@@ -151,67 +150,61 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                 label = {
                     Text(text = stringResource(id = R.string.email), color = Color.Gray)
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
-            CourseWorkTextField(
+            CourseWorkPasswordTextField(
                 value = password.value,
                 onValueChange = { viewModel.onPasswordChange(it) },
                 label = {
                     Text(text = stringResource(id = R.string.password), color = Color.Gray)
                 },
                 modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation(),
-                trailingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_eye),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
             )
             Spacer(modifier = Modifier.size(16.dp))
             Text(text = errorMessage.value ?: "", color = Color.Red)
             Button(
-                onClick = viewModel::onSignUpClick, modifier = Modifier.height(48.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                onClick = viewModel::onSignUpClick,
+                modifier = Modifier.height(48.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Primary),
             ) {
                 Box {
-                    AnimatedContent(targetState = loading.value,
+                    AnimatedContent(
+                        targetState = loading.value,
                         transitionSpec = {
                             fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.8f) togetherWith
-                                    fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.8f)
-                        }
+                                fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.8f)
+                        },
+                        label = "",
                     ) { target ->
                         if (target) {
                             CircularProgressIndicator(
                                 color = Color.White,
-                                modifier = Modifier
+                                modifier =
+                                Modifier
                                     .padding(horizontal = 32.dp)
-                                    .size(24.dp)
+                                    .size(24.dp),
                             )
                         } else {
                             Text(
                                 text = stringResource(id = R.string.sign_up),
                                 color = Color.White,
-                                modifier = Modifier.padding(horizontal = 32.dp)
+                                modifier = Modifier.padding(horizontal = 32.dp),
                             )
                         }
-
                     }
-
-
                 }
             }
             Spacer(modifier = Modifier.size(16.dp))
             Text(
                 text = stringResource(id = R.string.alread_have_account),
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(8.dp)
                     .clickable {
                         viewModel.onLoginClicked()
                     }
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             GroupSocialButtons(color = Color.Black, viewModel)
         }
@@ -226,7 +219,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                         sheetState.hide()
                         showDialog = false
                     }
-                }
+                },
             )
         }
     }

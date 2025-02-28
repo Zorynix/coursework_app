@@ -24,22 +24,21 @@ import com.example.coursework.ui.features.notifications.ErrorScreen
 import com.example.coursework.ui.features.notifications.LoadingScreen
 import kotlinx.coroutines.flow.collectLatest
 
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OrderDetailsScreen(
     orderID: String,
     navController: NavController,
-    viewModel: OrderDetailsViewModel = hiltViewModel()
+    viewModel: OrderDetailsViewModel = hiltViewModel(),
 ) {
-
     LaunchedEffect(key1 = orderID) {
         viewModel.getOrderDetails(orderID)
     }
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Text(text = "Order Details")
         LaunchedEffect(key1 = true) {
@@ -52,9 +51,7 @@ fun OrderDetailsScreen(
                     is OrderDetailsViewModel.OrderDetailsEvent.ShowPopUp -> {
                         Toast.makeText(navController.context, it.msg, Toast.LENGTH_SHORT).show()
                     }
-
                     else -> {
-
                     }
                 }
             }
@@ -79,10 +76,11 @@ fun OrderDetailsScreen(
                 Spacer(modifier = Modifier.padding(8.dp))
                 order.items.forEach {
                     Column(
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .shadow(8.dp)
-                            .background(Color.White).padding(16.dp)
+                            .background(Color.White).padding(16.dp),
                     ) {
                         Text(text = it.menuItemName ?: "")
                         Text(text = it.quantity.toString())
@@ -92,7 +90,7 @@ fun OrderDetailsScreen(
                     viewModel.listOfStatus.forEach {
                         Button(
                             onClick = { viewModel.updateOrderStatus(orderID, it) },
-                            enabled = order.status != it
+                            enabled = order.status != it,
                         ) {
                             Text(text = it)
                         }
@@ -100,7 +98,5 @@ fun OrderDetailsScreen(
                 }
             }
         }
-
-
     }
 }

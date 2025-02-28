@@ -8,5 +8,5 @@ data class Notification(
     val orderId: String,
     val title: String,
     val type: String,
-    val userId: String
+    val userId: String,
 )

@@ -30,15 +30,13 @@ import com.example.coursework.ui.navigation.OrderDetails
 import kotlinx.coroutines.launch
 
 @Composable
-fun OrderListScreen(
-    navController: NavController, viewModel: OrdersListViewModel = hiltViewModel()
-) {
+fun OrderListScreen(navController: NavController, viewModel: OrdersListViewModel = hiltViewModel(),) {
     val listOfItems = viewModel.getOrderTypes()
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "Order List",
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
         )
         val pagerState = rememberPagerState(pageCount = { listOfItems.size })
         val coroutineScope = rememberCoroutineScope()
@@ -47,12 +45,13 @@ fun OrderListScreen(
         }
         ScrollableTabRow(
             selectedTabIndex = pagerState.currentPage,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             listOfItems.forEachIndexed { index, item ->
                 Text(
                     text = item,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .clickable {
                             coroutineScope.launch {
@@ -60,7 +59,7 @@ fun OrderListScreen(
                             }
                         }
                         .padding(8.dp),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
@@ -90,9 +89,7 @@ fun OrderListScreen(
                         }
                     }
                 }
-
             }
-
         }
     }
 }
@@ -100,7 +97,8 @@ fun OrderListScreen(
 @Composable
 fun OrderListItem(order: Order, onOrderClicked: () -> Unit) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clip(RoundedCornerShape(12.dp))
@@ -108,7 +106,7 @@ fun OrderListItem(order: Order, onOrderClicked: () -> Unit) {
             .clickable {
                 onOrderClicked()
             }
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         Text(text = order.id)
         Text(text = order.status)

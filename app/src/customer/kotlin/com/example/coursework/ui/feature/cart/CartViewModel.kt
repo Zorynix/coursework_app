@@ -2,7 +2,6 @@ package com.example.coursework.ui.feature.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.coursework.data.FoodApi
 import com.example.coursework.data.models.Address
 import com.example.coursework.data.models.CartItem
@@ -23,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
-
     var errorTitle: String = ""
     var errorMessage: String = ""
     private val _uiState = MutableStateFlow<CartUiState>(CartUiState.Loading)
@@ -41,7 +39,6 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
     init {
         getCart()
     }
-
 
     fun getCart() {
         viewModelScope.launch {
@@ -143,7 +140,6 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
                     _uiState.value = CartUiState.Success(cartResponse!!)
                 }
             }
-
         }
     }
 
@@ -173,8 +169,9 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
                     foodApi.verifyPurchase(
                         ConfirmPaymentRequest(
                             paymentIntent!!.paymentIntentId,
-                            address.value!!.id!!
-                        ), paymentIntent!!.paymentIntentId
+                            address.value!!.id!!,
+                        ),
+                        paymentIntent!!.paymentIntentId,
                     )
                 }
             when (response) {

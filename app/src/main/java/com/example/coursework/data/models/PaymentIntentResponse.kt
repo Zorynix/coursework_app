@@ -8,5 +8,5 @@ data class PaymentIntentResponse(
     val paymentIntentClientSecret: String,
     val paymentIntentId: String,
     val publishableKey: String,
-    val status: String
+    val status: String,
 )

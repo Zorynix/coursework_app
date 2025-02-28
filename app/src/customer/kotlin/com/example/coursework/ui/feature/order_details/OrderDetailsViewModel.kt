@@ -15,13 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrderDetailsViewModel @Inject constructor(private val foodApi: FoodApi) : ViewModel() {
-
     private val _state = MutableStateFlow<OrderDetailsState>(OrderDetailsState.Loading)
     val state get() = _state.asStateFlow()
 
     private val _event = MutableSharedFlow<OrderDetailsEvent>()
     val event get() = _event.asSharedFlow()
-
 
     fun getOrderDetails(orderId: String) {
         viewModelScope.launch {

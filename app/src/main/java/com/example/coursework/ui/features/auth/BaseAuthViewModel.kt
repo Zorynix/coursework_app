@@ -1,17 +1,14 @@
 package com.example.coursework.ui.features.auth
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.coursework.data.FoodApi
 import com.example.coursework.data.auth.GoogleAuthUiProvider
-import com.example.coursework.data.models.AuthResponse
 import com.example.coursework.data.models.OAuthRequest
 import com.example.coursework.data.remote.ApiResponse
 import com.example.coursework.data.remote.safeApiCall
-
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -24,7 +21,6 @@ abstract class BaseAuthViewModel(open val foodApi: FoodApi) : ViewModel() {
     var errorDescription = ""
     private val googleAuthUiProvider = GoogleAuthUiProvider()
     private lateinit var callbackManager: CallbackManager
-
 
     abstract fun loading()
     abstract fun onGoogleError(msg: String)
@@ -43,9 +39,11 @@ abstract class BaseAuthViewModel(open val foodApi: FoodApi) : ViewModel() {
         viewModelScope.launch {
             loading()
             try {
-                val response = googleAuthUiProvider.signIn(
-                    context, CredentialManager.create(context)
-                )
+                val response =
+                    googleAuthUiProvider.signIn(
+                        context,
+                        CredentialManager.create(context),
+                    )
                 fetchFoodAppToken(response.token, "google") {
                     onGoogleError(it)
                 }
@@ -57,9 +55,11 @@ abstract class BaseAuthViewModel(open val foodApi: FoodApi) : ViewModel() {
 
     private fun fetchFoodAppToken(token: String, provider: String, onError: (String) -> Unit) {
         viewModelScope.launch {
-            val request = OAuthRequest(
-                token = token, provider = provider
-            )
+            val request =
+                OAuthRequest(
+                    token = token,
+                    provider = provider,
+                )
             val res = safeApiCall { foodApi.oAuth(request) }
             when (res) {
                 is ApiResponse.Success -> {
@@ -87,21 +87,24 @@ abstract class BaseAuthViewModel(open val foodApi: FoodApi) : ViewModel() {
         loading()
         callbackManager = CallbackManager.Factory.create()
         LoginManager.getInstance()
-            .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    fetchFoodAppToken(loginResult.accessToken.token, "facebook") {
-                        onFacebookError(it)
+            .registerCallback(
+                callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+                        fetchFoodAppToken(loginResult.accessToken.token, "facebook") {
+                            onFacebookError(it)
+                        }
                     }
-                }
 
-                override fun onCancel() {
-                    onFacebookError("Cancelled")
-                }
+                    override fun onCancel() {
+                        onFacebookError("Cancelled")
+                    }
 
-                override fun onError(exception: FacebookException) {
-                    onFacebookError("Failed: ${exception.message}")
-                }
-            })
+                    override fun onError(exception: FacebookException) {
+                        onFacebookError("Failed: ${exception.message}")
+                    }
+                },
+            )
 
         LoginManager.getInstance().logInWithReadPermissions(
             context,

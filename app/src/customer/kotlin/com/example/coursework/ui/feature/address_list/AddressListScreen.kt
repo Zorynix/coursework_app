@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,7 +16,6 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,14 +35,10 @@ import com.example.coursework.ui.navigation.AddAddress
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun AddressListScreen(
-    navController: NavController,
-    viewModel: AddressListViewModel = hiltViewModel()
-) {
+fun AddressListScreen(navController: NavController, viewModel: AddressListViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {
         viewModel.event.collectLatest {
-
             when (val addressEvent = it) {
                 is AddressListViewModel.AddressEvent.NavigateToEditAddress -> {
                     // Navigate to edit address screen
@@ -61,7 +55,6 @@ fun AddressListScreen(
                 }
 
                 else -> {
-
                 }
             }
         }
@@ -73,54 +66,57 @@ fun AddressListScreen(
         if (isAddressAdded?.value == true) {
             viewModel.getAddress()
         }
-
     }
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.back),
                 contentDescription = null,
-                modifier = Modifier.clickable {
+                modifier =
+                Modifier.clickable {
                     navController.popBackStack()
-                }
+                },
             )
 
             Text(text = "Адреса", style = MaterialTheme.typography.titleMedium)
             Icon(
                 imageVector = Icons.Filled.AddCircle,
                 contentDescription = null,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(16.dp)
                     .size(25.dp)
                     .clickable {
                         viewModel.onAddAddressClicked()
-                    })
+                    },
+            )
         }
         when (val addressState = state.value) {
             is AddressListViewModel.AddressState.Loading -> {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     CircularProgressIndicator()
                     Text(
                         text = "Загрузка..",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = Color.Gray,
                     )
                 }
             }
 
             is AddressListViewModel.AddressState.Success -> {
                 LazyColumn(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .padding(16.dp)
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 ) {
                     items(addressState.data) { address ->
                         AddressCard(address = address, onAddressClicked = {
@@ -134,12 +130,12 @@ fun AddressListScreen(
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     Text(
                         text = addressState.message,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
+                        color = Color.Gray,
                     )
                     Button(onClick = { viewModel.getAddress() }) {
                         Text(text = "Обновить")
@@ -147,8 +143,5 @@ fun AddressListScreen(
                 }
             }
         }
-
     }
-
-
 }

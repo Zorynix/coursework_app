@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(private val foodApi: FoodApi) : ViewModel() {
-
     private val _state = MutableStateFlow<NotificationsState>(NotificationsState.Loading)
     val state = _state.asStateFlow()
 
@@ -53,7 +52,7 @@ class NotificationsViewModel @Inject constructor(private val foodApi: FoodApi) :
                 _unreadCount.value = response.data.unreadCount
                 _state.value = NotificationsState.Success(response.data.notifications)
             } else {
-                _state.value = NotificationsState.Error("Failed to get notifications")
+                _state.value = NotificationsState.Error("Нет уведомлений")
             }
         }
     }

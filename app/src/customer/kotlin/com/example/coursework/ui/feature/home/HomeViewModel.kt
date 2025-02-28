@@ -19,7 +19,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewModel() {
-
     private val _uiState = MutableStateFlow<HomeScreenState>(HomeScreenState.Loading)
     val uiState: StateFlow<HomeScreenState> = _uiState.asStateFlow()
 
@@ -54,9 +53,10 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
             if (query.isEmpty()) {
                 _uiState.value = HomeScreenState.Success
             } else {
-                val filteredRestaurants = restaurants.filter {
-                    it.name.contains(query, ignoreCase = true)
-                }
+                val filteredRestaurants =
+                    restaurants.filter {
+                        it.name.contains(query, ignoreCase = true)
+                    }
                 if (filteredRestaurants.isNotEmpty()) {
                     _uiState.value = HomeScreenState.SearchResults(filteredRestaurants)
                 } else {
@@ -74,11 +74,11 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
     }
 
     private suspend fun getCategories(): List<Category> {
-
         var list = emptyList<Category>()
-        val response = safeApiCall {
-            foodApi.getCategories()
-        }
+        val response =
+            safeApiCall {
+                foodApi.getCategories()
+            }
         when (response) {
             is ApiResponse.Success -> {
                 list = response.data.data
@@ -88,18 +88,17 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
             }
         }
         return list
-
     }
 
     private suspend fun getPopularRestaurants(): List<Restaurant> {
         var list = emptyList<Restaurant>()
-        val response = safeApiCall {
-            foodApi.getRestaurants(40.7128, -74.0060)
-        }
+        val response =
+            safeApiCall {
+                foodApi.getRestaurants(40.7128, -74.0060)
+            }
         when (response) {
             is ApiResponse.Success -> {
                 list = response.data.data
-
             }
 
             else -> {
@@ -111,7 +110,7 @@ class HomeViewModel @Inject constructor(private val foodApi: FoodApi) : ViewMode
     fun onRestaurantSelected(it: Restaurant) {
         viewModelScope.launch {
             _navigationEvent.emit(
-                HomeScreenNavigationEvents.NavigateToDetail(it.name, it.imageUrl, it.id)
+                HomeScreenNavigationEvents.NavigateToDetail(it.name, it.imageUrl, it.id),
             )
         }
     }

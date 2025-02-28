@@ -12,14 +12,12 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 
 class GoogleAuthUiProvider {
-    suspend fun signIn(
-        activityContext: Context,
-        credentialManager: CredentialManager
-    ): GoogleAccount {
-        val creds = credentialManager.getCredential(
-            activityContext,
-            getCredentialRequest()
-        ).credential
+    suspend fun signIn(activityContext: Context, credentialManager: CredentialManager): GoogleAccount {
+        val creds =
+            credentialManager.getCredential(
+                activityContext,
+                getCredentialRequest(),
+            ).credential
         return handleCredentials(creds)
     }
 
@@ -31,7 +29,7 @@ class GoogleAuthUiProvider {
                 return GoogleAccount(
                     token = googleIdTokenCredential.idToken,
                     displayName = googleIdTokenCredential.displayName ?: "",
-                    profileImageUrl = googleIdTokenCredential.profilePictureUri.toString()
+                    profileImageUrl = googleIdTokenCredential.profilePictureUri.toString(),
                 )
             }
 
@@ -45,10 +43,9 @@ class GoogleAuthUiProvider {
         return GetCredentialRequest.Builder()
             .addCredentialOption(
                 GetSignInWithGoogleOption.Builder(
-                    GoogleServerClientID
-                ).build()
+                    GoogleServerClientID,
+                ).build(),
             )
             .build()
     }
-
 }

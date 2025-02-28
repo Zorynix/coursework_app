@@ -7,8 +7,7 @@ import com.example.coursework.notification.CourseWorkMessagingService
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-abstract class BaseCourseWorkActivity : ComponentActivity(){
-
+abstract class BaseCourseWorkActivity : ComponentActivity() {
     val viewModel by viewModels<HomeViewModel>()
 
     override fun onNewIntent(intent: Intent) {

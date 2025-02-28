@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class RestaurantViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
     var errorMsg = ""
@@ -29,9 +28,10 @@ class RestaurantViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel(
         viewModelScope.launch {
             _uiState.value = RestaurantEvent.Loading
             try {
-                val response = safeApiCall {
-                    foodApi.getFoodItemForRestaurant(id)
-                }
+                val response =
+                    safeApiCall {
+                        foodApi.getFoodItemForRestaurant(id)
+                    }
                 when (response) {
                     is com.example.coursework.data.remote.ApiResponse.Success -> {
                         _uiState.value = RestaurantEvent.Success(response.data.foodItems)
@@ -66,7 +66,6 @@ class RestaurantViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel(
             }
         }
     }
-
 
     sealed class RestaurantNavigationEvent {
         data object GoBack : RestaurantNavigationEvent()

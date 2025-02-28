@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrdersListViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
-
     fun getOrderTypes(): List<String> {
         val types = OrdersUtils.OrderStatus.entries.map { it.name }
         return types

@@ -1,0 +1,163 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:CartScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CartScreen(navController: NavController, viewModel: CartViewModel)</ID>
+    <ID>ExplicitItLambdaParameter:CartScreen.kt${ it -&gt; CartItemView(cartItem = it, onIncrement = { cartItem, _ -&gt; viewModel.incrementQuantity(cartItem) }, onDecrement = { cartItem, _ -&gt; viewModel.decrementQuantity(cartItem) }, onRemove = { viewModel.removeItem(it) }) }</ID>
+    <ID>FunctionNaming:AddAddressScreen.kt$@Composable fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewModel = hiltViewModel(),)</ID>
+    <ID>FunctionNaming:AddAddressScreen.kt$@Composable fun RequestLocationPermission(onPermissionGranted: () -&gt; Unit, onPermissionRejected: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:AddressListScreen.kt$@Composable fun AddressListScreen(navController: NavController, viewModel: AddressListViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:AuthScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AuthScreen( navController: NavController, isCustomer: Boolean = true, viewModel: AuthScreenViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:AuthScreen.kt$@Preview(showBackground = true) @Composable fun AuthScreenPreview()</ID>
+    <ID>FunctionNaming:CartScreen.kt$@Composable fun AddressCard(address: Address?, onAddressClicked: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:CartScreen.kt$@Composable fun CartHeaderView(onBack: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:CartScreen.kt$@Composable fun CartItemView( cartItem: CartItem, onIncrement: (CartItem, Int) -&gt; Unit, onDecrement: (CartItem, Int) -&gt; Unit, onRemove: (CartItem) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:CartScreen.kt$@Composable fun CheckoutDetailsView(checkoutDetails: CheckoutDetails)</ID>
+    <ID>FunctionNaming:CartScreen.kt$@Composable fun CheckoutRowItem(title: String, value: Double, currency: String)</ID>
+    <ID>FunctionNaming:CartScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CartScreen(navController: NavController, viewModel: CartViewModel)</ID>
+    <ID>FunctionNaming:FoodDetailsScreen.kt$@Composable fun FoodItemCounter(onCounterIncrement: () -&gt; Unit, onCounterDecrement: () -&gt; Unit, count: Int)</ID>
+    <ID>FunctionNaming:FoodDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class) @Composable fun SharedTransitionScope.FoodDetailsScreen( navController: NavController, foodItem: FoodItem, animatedVisibilityScope: AnimatedVisibilityScope, onItemAddedToCart: () -&gt; Unit, viewModel: FoodDetailsViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun CategoriesList(categories: List&lt;Category&gt;, onCategorySelected: (Category) -&gt; Unit)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun CategoryItem(category: Category, onCategorySelected: (Category) -&gt; Unit)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun SearchBar( modifier: Modifier = Modifier, value: String, placeholder: String, leftContent: @Composable () -&gt; Unit, onChange: (value: String) -&gt; Unit, onClear: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.HomeScreen( navController: NavController, animatedVisibilityScope: AnimatedVisibilityScope, viewModel: HomeViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantItem( restaurant: Restaurant, animatedVisibilityScope: AnimatedVisibilityScope, onRestaurantSelected: (Restaurant) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantList( restaurants: List&lt;Restaurant&gt;, animatedVisibilityScope: AnimatedVisibilityScope, onRestaurantSelected: (Restaurant) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:MainActivity.kt$@Composable fun BoxScope.ItemCount(count: Int)</ID>
+    <ID>FunctionNaming:MainActivity.kt$@Composable fun Greeting(name: String, modifier: Modifier = Modifier)</ID>
+    <ID>FunctionNaming:MainActivity.kt$@Preview(showBackground = true) @Composable fun GreetingPreview()</ID>
+    <ID>FunctionNaming:NotificationsList.kt$@Composable fun ErrorScreen(message: String, onRetry: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:NotificationsList.kt$@Composable fun LoadingScreen()</ID>
+    <ID>FunctionNaming:NotificationsList.kt$@Composable fun NotificationItem(notification: Notification, onRead: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:NotificationsList.kt$@Composable fun NotificationsList(navController: NavController, viewModel: NotificationsViewModel)</ID>
+    <ID>FunctionNaming:OrderDetailsScreen.kt$@Composable fun OrderDetailsScreen( navController: NavController, orderID: String, viewModel: OrderDetailsViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:OrderDetailsScreen.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun OrderDetailsScreen( orderID: String, navController: NavController, viewModel: OrderDetailsViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:OrderListScreen.kt$@Composable fun OrderDetailsText(order: Order)</ID>
+    <ID>FunctionNaming:OrderListScreen.kt$@Composable fun OrderListInternal(list: List&lt;Order&gt;, onClick: (Order) -&gt; Unit)</ID>
+    <ID>FunctionNaming:OrderListScreen.kt$@Composable fun OrderListItem(order: Order, onClick: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:OrderListScreen.kt$@Composable fun OrderListItem(order: Order, onOrderClicked: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:OrderListScreen.kt$@Composable fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:OrderListScreen.kt$@Composable fun OrderListScreen(navController: NavController, viewModel: OrdersListViewModel = hiltViewModel(),)</ID>
+    <ID>FunctionNaming:OrderSuccess.kt$@Composable fun OrderSuccess(orderID: String, navController: NavController)</ID>
+    <ID>FunctionNaming:RestaurantDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.FoodItemView( footItem: FoodItem, animatedVisibilityScope: AnimatedVisibilityScope, onClick: (FoodItem) -&gt; Unit, )</ID>
+    <ID>FunctionNaming:RestaurantDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantDetails( title: String, description: String, restaurantID: String, animatedVisibilityScope: AnimatedVisibilityScope, )</ID>
+    <ID>FunctionNaming:RestaurantDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantDetailsHeader( imageUrl: String, restaurantID: String, animatedVisibilityScope: AnimatedVisibilityScope, onBackButton: () -&gt; Unit, onFavoriteButton: () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:RestaurantDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantDetailsScreen( navController: NavController, name: String, imageUrl: String, restaurantID: String, animatedVisibilityScope: AnimatedVisibilityScope, viewModel: RestaurantViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:SignInScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun SignInScreen( navController: NavController, isCutomer: Boolean = true, viewModel: SignInViewModel = hiltViewModel(), )</ID>
+    <ID>FunctionNaming:SignInScreen.kt$@Preview(showBackground = true) @Composable fun PreviewSignUpScreen()</ID>
+    <ID>FunctionNaming:SignUpScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hiltViewModel())</ID>
+    <ID>FunctionNaming:SignUpScreen.kt$@Preview(showBackground = true) @Composable fun PreviewSignUpScreen()</ID>
+    <ID>FunctionNaming:Theme.kt$@Composable fun CourseWorkTheme( darkTheme: Boolean = isSystemInDarkTheme(), dynamicColor: Boolean = false, content: @Composable () -&gt; Unit, )</ID>
+    <ID>FunctionNaming:Widgets.kt$@Composable fun BasicDialog(title: String, description: String, onClick: () -&gt; Unit)</ID>
+    <ID>FunctionNaming:Widgets.kt$@Composable fun CourseWorkNavHost( navController: NavHostController, startDestination: Any, modifier: Modifier = Modifier, contentAlignment: Alignment = Alignment.TopStart, route: KClass&lt;*&gt;? = null, typeMap: Map&lt;KType, @JvmSuppressWildcards NavType&lt;*&gt;&gt; = emptyMap(), enterTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; EnterTransition ) = { slideIntoContainer( towards = AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300), ) + fadeIn(animationSpec = tween(300)) }, exitTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; ExitTransition ) = { slideOutOfContainer( towards = AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300), ) + fadeOut(animationSpec = tween(300)) }, popEnterTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; EnterTransition ) = { slideIntoContainer( towards = AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300), ) + fadeIn(animationSpec = tween(300)) }, popExitTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; ExitTransition ) = { slideOutOfContainer( towards = AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300), ) + fadeOut(animationSpec = tween(300)) }, sizeTransform: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; SizeTransform? )? = null, builder: NavGraphBuilder.() -&gt; Unit, )</ID>
+    <ID>FunctionNaming:Widgets.kt$@Composable fun CourseWorkPasswordTextField( value: String, onValueChange: (String) -&gt; Unit, modifier: Modifier = Modifier, label: @Composable (() -&gt; Unit)? = null, enabled: Boolean = true, isError: Boolean = false, )</ID>
+    <ID>FunctionNaming:Widgets.kt$@Composable fun CourseWorkTextField( value: String, onValueChange: (String) -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true, readOnly: Boolean = false, textStyle: TextStyle = LocalTextStyle.current, label: @Composable (() -&gt; Unit)? = null, placeholder: @Composable (() -&gt; Unit)? = null, leadingIcon: @Composable (() -&gt; Unit)? = null, trailingIcon: @Composable (() -&gt; Unit)? = null, prefix: @Composable (() -&gt; Unit)? = null, suffix: @Composable (() -&gt; Unit)? = null, supportingText: @Composable (() -&gt; Unit)? = null, isError: Boolean = false, visualTransformation: VisualTransformation = VisualTransformation.None, keyboardOptions: KeyboardOptions = KeyboardOptions.Default, keyboardActions: KeyboardActions = KeyboardActions.Default, singleLine: Boolean = false, maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE, minLines: Int = 1, interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }, shape: Shape = RoundedCornerShape(10.dp), colors: TextFieldColors = OutlinedTextFieldDefaults.colors().copy( focusedIndicatorColor = Primary, unfocusedIndicatorColor = Color.LightGray.copy(alpha = 0.4f), ), )</ID>
+    <ID>FunctionNaming:Widgets.kt$@Composable fun GroupSocialButtons(color: Color = Color.White, viewModel: BaseAuthViewModel,)</ID>
+    <ID>FunctionNaming:Widgets.kt$@Composable fun SocialButton(icon: Int, title: Int, onClick: () -&gt; Unit,)</ID>
+    <ID>Indentation:CourseWorkNotificationManager.kt$CourseWorkNotificationManager$ </ID>
+    <ID>Indentation:LocationManager.kt$LocationManager$ </ID>
+    <ID>InvalidPackageDeclaration:OrderListViewModel.kt$package com.example.coursework.ui.features.orders</ID>
+    <ID>LongMethod:AddAddressScreen.kt$@Composable fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewModel = hiltViewModel(),)</ID>
+    <ID>LongMethod:AddressListScreen.kt$@Composable fun AddressListScreen(navController: NavController, viewModel: AddressListViewModel = hiltViewModel())</ID>
+    <ID>LongMethod:AuthScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AuthScreen( navController: NavController, isCustomer: Boolean = true, viewModel: AuthScreenViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:CartScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CartScreen(navController: NavController, viewModel: CartViewModel)</ID>
+    <ID>LongMethod:FoodDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class) @Composable fun SharedTransitionScope.FoodDetailsScreen( navController: NavController, foodItem: FoodItem, animatedVisibilityScope: AnimatedVisibilityScope, onItemAddedToCart: () -&gt; Unit, viewModel: FoodDetailsViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.HomeScreen( navController: NavController, animatedVisibilityScope: AnimatedVisibilityScope, viewModel: HomeViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantItem( restaurant: Restaurant, animatedVisibilityScope: AnimatedVisibilityScope, onRestaurantSelected: (Restaurant) -&gt; Unit, )</ID>
+    <ID>LongMethod:MainActivity.kt$MainActivity$@OptIn(ExperimentalSharedTransitionApi::class) override fun onCreate(savedInstanceState: Bundle?)</ID>
+    <ID>LongMethod:OrderDetailsScreen.kt$@Composable fun OrderDetailsScreen( navController: NavController, orderID: String, viewModel: OrderDetailsViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:OrderDetailsScreen.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun OrderDetailsScreen( orderID: String, navController: NavController, viewModel: OrderDetailsViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:OrderListScreen.kt$@Composable fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel = hiltViewModel())</ID>
+    <ID>LongMethod:OrderListScreen.kt$@Composable fun OrderListScreen(navController: NavController, viewModel: OrdersListViewModel = hiltViewModel(),)</ID>
+    <ID>LongMethod:RestaurantDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.FoodItemView( footItem: FoodItem, animatedVisibilityScope: AnimatedVisibilityScope, onClick: (FoodItem) -&gt; Unit, )</ID>
+    <ID>LongMethod:RestaurantDetailsScreen.kt$@OptIn(ExperimentalSharedTransitionApi::class) @Composable fun SharedTransitionScope.RestaurantDetailsScreen( navController: NavController, name: String, imageUrl: String, restaurantID: String, animatedVisibilityScope: AnimatedVisibilityScope, viewModel: RestaurantViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:SignInScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun SignInScreen( navController: NavController, isCutomer: Boolean = true, viewModel: SignInViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:SignUpScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hiltViewModel())</ID>
+    <ID>LongParameterList:HomeScreen.kt$( modifier: Modifier = Modifier, value: String, placeholder: String, leftContent: @Composable () -&gt; Unit, onChange: (value: String) -&gt; Unit, onClear: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:RestaurantDetailsScreen.kt$( navController: NavController, name: String, imageUrl: String, restaurantID: String, animatedVisibilityScope: AnimatedVisibilityScope, viewModel: RestaurantViewModel = hiltViewModel(), )</ID>
+    <ID>LongParameterList:Widgets.kt$( navController: NavHostController, startDestination: Any, modifier: Modifier = Modifier, contentAlignment: Alignment = Alignment.TopStart, route: KClass&lt;*&gt;? = null, typeMap: Map&lt;KType, @JvmSuppressWildcards NavType&lt;*&gt;&gt; = emptyMap(), enterTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; EnterTransition ) = { slideIntoContainer( towards = AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300), ) + fadeIn(animationSpec = tween(300)) }, exitTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; ExitTransition ) = { slideOutOfContainer( towards = AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300), ) + fadeOut(animationSpec = tween(300)) }, popEnterTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; EnterTransition ) = { slideIntoContainer( towards = AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300), ) + fadeIn(animationSpec = tween(300)) }, popExitTransition: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; ExitTransition ) = { slideOutOfContainer( towards = AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300), ) + fadeOut(animationSpec = tween(300)) }, sizeTransform: ( @JvmSuppressWildcards AnimatedContentTransitionScope&lt;NavBackStackEntry&gt;.() -&gt; SizeTransform? )? = null, builder: NavGraphBuilder.() -&gt; Unit, )</ID>
+    <ID>LongParameterList:Widgets.kt$( value: String, onValueChange: (String) -&gt; Unit, modifier: Modifier = Modifier, enabled: Boolean = true, readOnly: Boolean = false, textStyle: TextStyle = LocalTextStyle.current, label: @Composable (() -&gt; Unit)? = null, placeholder: @Composable (() -&gt; Unit)? = null, leadingIcon: @Composable (() -&gt; Unit)? = null, trailingIcon: @Composable (() -&gt; Unit)? = null, prefix: @Composable (() -&gt; Unit)? = null, suffix: @Composable (() -&gt; Unit)? = null, supportingText: @Composable (() -&gt; Unit)? = null, isError: Boolean = false, visualTransformation: VisualTransformation = VisualTransformation.None, keyboardOptions: KeyboardOptions = KeyboardOptions.Default, keyboardActions: KeyboardActions = KeyboardActions.Default, singleLine: Boolean = false, maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE, minLines: Int = 1, interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }, shape: Shape = RoundedCornerShape(10.dp), colors: TextFieldColors = OutlinedTextFieldDefaults.colors().copy( focusedIndicatorColor = Primary, unfocusedIndicatorColor = Color.LightGray.copy(alpha = 0.4f), ), )</ID>
+    <ID>LongParameterList:Widgets.kt$( value: String, onValueChange: (String) -&gt; Unit, modifier: Modifier = Modifier, label: @Composable (() -&gt; Unit)? = null, enabled: Boolean = true, isError: Boolean = false, )</ID>
+    <ID>MagicNumber:AddAddressScreen.kt$13f</ID>
+    <ID>MagicNumber:AuthScreen.kt$0.6f</ID>
+    <ID>MagicNumber:BaseAuthViewModel.kt$BaseAuthViewModel$401</ID>
+    <ID>MagicNumber:BaseAuthViewModel.kt$BaseAuthViewModel$404</ID>
+    <ID>MagicNumber:BaseAuthViewModel.kt$BaseAuthViewModel$500</ID>
+    <ID>MagicNumber:CartViewModel.kt$CartViewModel$5</ID>
+    <ID>MagicNumber:Color.kt$0xFF03A9F4</ID>
+    <ID>MagicNumber:Color.kt$0xFF625b71</ID>
+    <ID>MagicNumber:Color.kt$0xFF6650a4</ID>
+    <ID>MagicNumber:Color.kt$0xFF7D5260</ID>
+    <ID>MagicNumber:Color.kt$0xFFCCC2DC</ID>
+    <ID>MagicNumber:Color.kt$0xFFD0BCFF</ID>
+    <ID>MagicNumber:Color.kt$0xFFEFB8C8</ID>
+    <ID>MagicNumber:Color.kt$0xFFFE724C</ID>
+    <ID>MagicNumber:Color.kt$0xFFFFC529</ID>
+    <ID>MagicNumber:CourseWorkMessagingService.kt$CourseWorkMessagingService$13034</ID>
+    <ID>MagicNumber:FoodDetailsViewModel.kt$FoodDetailsViewModel$5</ID>
+    <ID>MagicNumber:HomeScreen.kt$0xFFEFEFEF</ID>
+    <ID>MagicNumber:HomeViewModel.kt$HomeViewModel$40.7128</ID>
+    <ID>MagicNumber:HomeViewModel.kt$HomeViewModel$74.0060</ID>
+    <ID>MagicNumber:MainActivity.kt$MainActivity$0.5f</ID>
+    <ID>MagicNumber:MainActivity.kt$MainActivity$300</ID>
+    <ID>MagicNumber:MainActivity.kt$MainActivity$3000</ID>
+    <ID>MagicNumber:MainActivity.kt$MainActivity$500</ID>
+    <ID>MagicNumber:RestaurantViewModel.kt$RestaurantViewModel$401</ID>
+    <ID>MagicNumber:RestaurantViewModel.kt$RestaurantViewModel$404</ID>
+    <ID>MagicNumber:SignInScreen.kt$300</ID>
+    <ID>MagicNumber:SignInViewModel.kt$SignInViewModel$400</ID>
+    <ID>MagicNumber:SignUpScreen.kt$300</ID>
+    <ID>MagicNumber:SignUpViewModel.kt$SignUpViewModel$400</ID>
+    <ID>MagicNumber:Widgets.kt$300</ID>
+    <ID>MaxLineLength:AddAddressScreen.kt$if</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$currentRoute?.hierarchy?.any { it.route == item.route::class.qualifiedName } == true</ID>
+    <ID>MaxLineLength:MainActivity.kt$MainActivity$tint = if (selected) MaterialTheme.colorScheme.primary else Color.Gray</ID>
+    <ID>MaxLineLength:OrderListScreen.kt$color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else Color.White</ID>
+    <ID>MaxLineLength:RestaurantDetailsScreen.kt$description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget sapien fermentum aliquam. Nullam nec nunc nec libero fermentum aliquam. Nullam nec nunc nec libero fermentum aliquam."</ID>
+    <ID>MaximumLineLength:AddAddressScreen.kt$ </ID>
+    <ID>MaximumLineLength:MainActivity.kt$MainActivity$ </ID>
+    <ID>MaximumLineLength:OrderListScreen.kt$ </ID>
+    <ID>MaximumLineLength:RestaurantDetailsScreen.kt$ </ID>
+    <ID>MayBeConst:Const.kt$val GoogleServerClientID = "474045524437-l5pksjvhvra9npgigoei2ijo6vdc2s7p.apps.googleusercontent.com"</ID>
+    <ID>NoLineBreakAfterElse:CourseWorkNotificationManager.kt$CourseWorkNotificationManager$ </ID>
+    <ID>PackageName:AddAddressScreen.kt$package com.example.coursework.ui.feature.add_address</ID>
+    <ID>PackageName:AddAddressViewModel.kt$package com.example.coursework.ui.feature.add_address</ID>
+    <ID>PackageName:AddressListScreen.kt$package com.example.coursework.ui.feature.address_list</ID>
+    <ID>PackageName:AddressListViewModel.kt$package com.example.coursework.ui.feature.address_list</ID>
+    <ID>PackageName:FoodDetailsScreen.kt$package com.example.coursework.ui.feature.food_item_details</ID>
+    <ID>PackageName:FoodDetailsViewModel.kt$package com.example.coursework.ui.feature.food_item_details</ID>
+    <ID>PackageName:OrderDetailsScreen.kt$package com.example.coursework.ui.feature.order_details</ID>
+    <ID>PackageName:OrderDetailsViewModel.kt$package com.example.coursework.ui.feature.order_details</ID>
+    <ID>PackageName:OrderListScreen.kt$package com.example.coursework.ui.feature.order_list</ID>
+    <ID>PackageName:OrderSuccess.kt$package com.example.coursework.ui.feature.order_success</ID>
+    <ID>PackageName:OrdersListViewModel.kt$package com.example.coursework.ui.feature.order_list</ID>
+    <ID>PackageName:RestaurantDetailsScreen.kt$package com.example.coursework.ui.feature.restaurant_details</ID>
+    <ID>PackageName:RestaurantViewModel.kt$package com.example.coursework.ui.feature.restaurant_details</ID>
+    <ID>PackageNaming:AddAddressScreen.kt$package com.example.coursework.ui.feature.add_address</ID>
+    <ID>PackageNaming:AddAddressViewModel.kt$package com.example.coursework.ui.feature.add_address</ID>
+    <ID>PackageNaming:AddressListScreen.kt$package com.example.coursework.ui.feature.address_list</ID>
+    <ID>PackageNaming:AddressListViewModel.kt$package com.example.coursework.ui.feature.address_list</ID>
+    <ID>PackageNaming:FoodDetailsScreen.kt$package com.example.coursework.ui.feature.food_item_details</ID>
+    <ID>PackageNaming:FoodDetailsViewModel.kt$package com.example.coursework.ui.feature.food_item_details</ID>
+    <ID>PackageNaming:OrderDetailsScreen.kt$package com.example.coursework.ui.feature.order_details</ID>
+    <ID>PackageNaming:OrderDetailsViewModel.kt$package com.example.coursework.ui.feature.order_details</ID>
+    <ID>PackageNaming:OrderListScreen.kt$package com.example.coursework.ui.feature.order_list</ID>
+    <ID>PackageNaming:OrderSuccess.kt$package com.example.coursework.ui.feature.order_success</ID>
+    <ID>PackageNaming:OrdersListViewModel.kt$package com.example.coursework.ui.feature.order_list</ID>
+    <ID>PackageNaming:RestaurantDetailsScreen.kt$package com.example.coursework.ui.feature.restaurant_details</ID>
+    <ID>PackageNaming:RestaurantViewModel.kt$package com.example.coursework.ui.feature.restaurant_details</ID>
+    <ID>ReturnCount:OrderDetailsViewModel.kt$OrderDetailsViewModel$fun getImage(order: Order): Int</ID>
+    <ID>SpacingAroundCurly:CourseWorkNotificationManager.kt$CourseWorkNotificationManager${</ID>
+    <ID>SwallowedException:RestaurantViewModel.kt$RestaurantViewModel$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:ApiResponse.kt$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:BaseAuthViewModel.kt$BaseAuthViewModel$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:RestaurantViewModel.kt$RestaurantViewModel$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SignUpViewModel.kt$SignUpViewModel$e: Exception</ID>
+    <ID>TooManyFunctions:FoodApi.kt$FoodApi</ID>
+    <ID>UnusedParameter:HomeScreen.kt$navController: NavController</ID>
+    <ID>UnusedPrivateProperty:SignInScreen.kt$val context = LocalContext.current</ID>
+    <ID>UnusedPrivateProperty:SignUpScreen.kt$val context = LocalContext.current</ID>
+    <ID>UseCheckOrError:GoogleAuthUiProvider.kt$GoogleAuthUiProvider$throw IllegalStateException("Invalid credential type")</ID>
+  </CurrentIssues>
+</SmellBaseline>

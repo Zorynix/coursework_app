@@ -27,6 +27,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -34,7 +36,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +50,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
@@ -58,64 +65,57 @@ import com.example.coursework.ui.theme.Primary
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
-
 @Composable
-fun GroupSocialButtons(
-    color: Color = Color.White,
-    viewModel: BaseAuthViewModel
-) {
-
+fun GroupSocialButtons(color: Color = Color.White, viewModel: BaseAuthViewModel,) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             HorizontalDivider(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
                 thickness = 1.dp,
-                color = color
+                color = color,
             )
             Text(
                 text = stringResource(id = R.string.sign_in_with),
                 color = color,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
             )
             HorizontalDivider(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .weight(1f)
                     .padding(end = 8.dp),
                 thickness = 1.dp,
-                color = color
+                color = color,
             )
         }
         val context = LocalContext.current as ComponentActivity
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             SocialButton(
                 icon = R.drawable.ic_facebook,
                 title = R.string.sign_with_facebook,
-                onClick = { viewModel.onFacebookClicked(context) }
+                onClick = { viewModel.onFacebookClicked(context) },
             )
             SocialButton(
                 icon = R.drawable.ic_google,
                 title = R.string.sign_with_google,
-                onClick = { viewModel.onGoogleClicked(context) }
+                onClick = { viewModel.onGoogleClicked(context) },
             )
         }
-
     }
 }
 
-
 @Composable
-fun SocialButton(
-    icon: Int, title: Int, onClick: () -> Unit
-) {
+fun SocialButton(icon: Int, title: Int, onClick: () -> Unit,) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
@@ -123,17 +123,17 @@ fun SocialButton(
     ) {
         Row(
             modifier = Modifier.height(38.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(id = icon),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = stringResource(id = title),
-                color = Color.Black
+                color = Color.Black,
             )
         }
     }
@@ -143,15 +143,16 @@ fun SocialButton(
 fun BasicDialog(title: String, description: String, onClick: () -> Unit) {
     Surface {
         Column(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = title,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
@@ -162,18 +163,16 @@ fun BasicDialog(title: String, description: String, onClick: () -> Unit) {
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(containerColor = Primary),
                 shape = RoundedCornerShape(16.dp),
-
-                ) {
+            ) {
                 Text(
                     text = stringResource(id = R.string.ok),
                     color = Color.White,
-                    modifier = Modifier.padding(horizontal = 32.dp)
+                    modifier = Modifier.padding(horizontal = 32.dp),
                 )
             }
         }
     }
 }
-
 
 @Composable
 fun CourseWorkTextField(
@@ -199,10 +198,11 @@ fun CourseWorkTextField(
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = RoundedCornerShape(10.dp),
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors().copy(
-        focusedIndicatorColor = Primary,
-        unfocusedIndicatorColor = Color.LightGray.copy(alpha = 0.4f),
-    )
+    colors: TextFieldColors =
+        OutlinedTextFieldDefaults.colors().copy(
+            focusedIndicatorColor = Primary,
+            unfocusedIndicatorColor = Color.LightGray.copy(alpha = 0.4f),
+        ),
 ) {
     Column(Modifier.padding(vertical = 8.dp)) {
         label?.let {
@@ -235,9 +235,49 @@ fun CourseWorkTextField(
             minLines,
             interactionSource,
             shape,
-            colors
+            colors,
         )
     }
+}
+
+@Composable
+fun CourseWorkPasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    label: @Composable (() -> Unit)? = null,
+    enabled: Boolean = true,
+    isError: Boolean = false,
+) {
+    var isPasswordVisible by remember { mutableStateOf(false) }
+
+    CourseWorkTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        enabled = enabled,
+        label = label,
+        visualTransformation =
+        if (isPasswordVisible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+        trailingIcon = {
+            IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                Icon(
+                    painter =
+                    painterResource(
+                        id = if (isPasswordVisible) R.drawable.ic_eye_off else R.drawable.ic_eye,
+                    ),
+                    contentDescription = "Toggle password visibility",
+                    modifier = Modifier.size(24.dp),
+                )
+            }
+        },
+        isError = isError,
+    )
 }
 
 fun LazyListScope.gridItems(
@@ -271,7 +311,7 @@ fun <T> LazyListScope.gridItems(
                     androidx.compose.runtime.key(key?.invoke(item)) {
                         Box(
                             modifier = Modifier.weight(1f, fill = true),
-                            propagateMinConstraints = true
+                            propagateMinConstraints = true,
                         ) {
                             itemContent.invoke(this, item)
                         }
@@ -293,71 +333,68 @@ fun CourseWorkNavHost(
     route: KClass<*>? = null,
     typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = emptyMap(),
     enterTransition:
-    (@JvmSuppressWildcards
-    AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+    (
+    @JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition
+    ) =
         {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(300)
+                animationSpec = tween(300),
             ) + fadeIn(animationSpec = tween(300))
         },
     exitTransition:
-    (@JvmSuppressWildcards
-    AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+    (
+    @JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition
+    ) =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                animationSpec = tween(300)
+                animationSpec = tween(300),
             ) + fadeOut(animationSpec = tween(300))
         },
     popEnterTransition:
-    (@JvmSuppressWildcards
-    AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+    (
+    @JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition
+    ) =
         {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(300)
+                animationSpec = tween(300),
             ) + fadeIn(animationSpec = tween(300))
         },
     popExitTransition:
-    (@JvmSuppressWildcards
-    AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+    (
+    @JvmSuppressWildcards
+    AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition
+    ) =
         {
             slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(300)
+                animationSpec = tween(300),
             ) + fadeOut(animationSpec = tween(300))
         },
-    sizeTransform:
-    (@JvmSuppressWildcards
-    AnimatedContentTransitionScope<NavBackStackEntry>.() -> SizeTransform?)? =
+    sizeTransform: (
+        @JvmSuppressWildcards
+        AnimatedContentTransitionScope<NavBackStackEntry>.() -> SizeTransform?
+    )? =
         null,
-    builder: NavGraphBuilder.() -> Unit
+    builder: NavGraphBuilder.() -> Unit,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier,
         contentAlignment = contentAlignment,
-        route= route,
+        route = route,
         typeMap = typeMap,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
         popEnterTransition = popEnterTransition,
         popExitTransition = popExitTransition,
         sizeTransform = sizeTransform,
-        builder = builder
+        builder = builder,
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
-
     private val _uiState = MutableStateFlow<HomeScreenState>(HomeScreenState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -51,5 +50,4 @@ class HomeViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
         object Failed : HomeScreenState()
         data class Success(val data: Restaurant) : HomeScreenState()
     }
-
 }

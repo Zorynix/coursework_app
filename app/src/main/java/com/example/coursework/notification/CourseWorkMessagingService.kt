@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CourseWorkMessagingService : FirebaseMessagingService() {
-
     @Inject
     lateinit var courseWorkNotificationManager: CourseWorkNotificationManager
     override fun onNewToken(token: String) {
@@ -30,20 +29,25 @@ class CourseWorkMessagingService : FirebaseMessagingService() {
             val orderID = data[ORDER_ID]
             intent.putExtra(ORDER_ID, orderID)
         }
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            1,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val notificationChannelType = when (type) {
-            "order" -> CourseWorkNotificationManager.NotificationChannelType.ORDER
-            "general" -> CourseWorkNotificationManager.NotificationChannelType.PROMOTION
-            else -> CourseWorkNotificationManager.NotificationChannelType.ACCOUNT
-        }
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this,
+                1,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+        val notificationChannelType =
+            when (type) {
+                "order" -> CourseWorkNotificationManager.NotificationChannelType.ORDER
+                "general" -> CourseWorkNotificationManager.NotificationChannelType.PROMOTION
+                else -> CourseWorkNotificationManager.NotificationChannelType.ACCOUNT
+            }
         courseWorkNotificationManager.showNotification(
-            title, messageText, 13034, pendingIntent,
-            notificationChannelType
+            title,
+            messageText,
+            13034,
+            pendingIntent,
+            notificationChannelType,
         )
     }
 

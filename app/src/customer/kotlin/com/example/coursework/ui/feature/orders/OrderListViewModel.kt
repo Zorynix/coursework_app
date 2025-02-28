@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrderListViewModel @Inject constructor(private val foodApi: FoodApi) : ViewModel() {
-
     private val _state = MutableStateFlow<OrderListState>(OrderListState.Loading)
     val state get() = _state.asStateFlow()
 

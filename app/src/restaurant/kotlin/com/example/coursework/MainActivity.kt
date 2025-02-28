@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -45,14 +43,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.coursework.data.FoodApi
 import com.example.coursework.data.CourseWorkSession
-import com.example.coursework.data.models.Order
+import com.example.coursework.data.FoodApi
 import com.example.coursework.ui.CourseWorkNavHost
 import com.example.coursework.ui.feature.home.HomeScreen
 import com.example.coursework.ui.feature.order_details.OrderDetailsScreen
@@ -69,10 +65,8 @@ import com.example.coursework.ui.navigation.NavRoute
 import com.example.coursework.ui.navigation.Notification
 import com.example.coursework.ui.navigation.OrderDetails
 import com.example.coursework.ui.navigation.OrderList
-import com.example.coursework.ui.navigation.OrderSuccess
 import com.example.coursework.ui.navigation.SignUp
 import com.example.coursework.ui.theme.CourseWorkTheme
-import com.example.coursework.ui.theme.Mustard
 import com.example.coursework.ui.theme.Mustard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -84,210 +78,217 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseCourseWorkActivity() {
-  var showSplashScreen = true
+    var showSplashScreen = true
 
-  @Inject
-  lateinit var foodApi: FoodApi
+    @Inject
+    lateinit var foodApi: FoodApi
 
-  @Inject
-  lateinit var session: CourseWorkSession
+    @Inject
+    lateinit var session: CourseWorkSession
 
-  sealed class BottomNavItem(val route: NavRoute, val icon: Int) {
-    object Home : BottomNavItem(com.example.coursework.ui.navigation.Home, R.drawable.ic_home)
-    object Notification :
-      BottomNavItem(
-        com.example.coursework.ui.navigation.Notification,
-        R.drawable.ic_notification
-      )
+    sealed class BottomNavItem(val route: NavRoute, val icon: Int) {
+        object Home : BottomNavItem(com.example.coursework.ui.navigation.Home, R.drawable.ic_home)
+        object Notification :
+            BottomNavItem(
+                com.example.coursework.ui.navigation.Notification,
+                R.drawable.ic_notification,
+            )
 
-    object Orders : BottomNavItem(
-      OrderList,
-      R.drawable.ic_orders
-    )
-  }
-
-  @OptIn(ExperimentalSharedTransitionApi::class)
-  override fun onCreate(savedInstanceState: Bundle?) {
-    installSplashScreen().apply {
-      setKeepOnScreenCondition {
-        showSplashScreen
-      }
-      setOnExitAnimationListener { screen ->
-        val zoomX = ObjectAnimator.ofFloat(
-          screen.iconView,
-          View.SCALE_X,
-          0.5f,
-          0f
+        object Orders : BottomNavItem(
+            OrderList,
+            R.drawable.ic_orders,
         )
-        val zoomY = ObjectAnimator.ofFloat(
-          screen.iconView,
-          View.SCALE_Y,
-          0.5f,
-          0f
-        )
-        zoomX.duration = 500
-        zoomY.duration = 500
-        zoomX.interpolator = OvershootInterpolator()
-        zoomY.interpolator = OvershootInterpolator()
-        zoomX.doOnEnd {
-          screen.remove()
-        }
-        zoomY.doOnEnd {
-          screen.remove()
-        }
-        zoomY.start()
-        zoomX.start()
-      }
     }
-    super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
-    setContent {
-      CourseWorkTheme {
 
-        val shouldShowBottomNav = remember {
-          mutableStateOf(false)
-        }
-        val navItems = listOf(
-          BottomNavItem.Home,
-          BottomNavItem.Notification,
-          BottomNavItem.Orders
-        )
-        val navController = rememberNavController()
-        val notificationViewModel: NotificationsViewModel = hiltViewModel()
-        val unreadCount = notificationViewModel.unreadCount.collectAsStateWithLifecycle()
-
-        LaunchedEffect(key1 = true) {
-          viewModel.event.collectLatest {
-            when (it) {
-              is HomeViewModel.HomeEvent.NavigateToOrderDetail -> {
-                navController.navigate(OrderDetails(it.orderID))
-              }
+    @OptIn(ExperimentalSharedTransitionApi::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                showSplashScreen
             }
-          }
+            setOnExitAnimationListener { screen ->
+                val zoomX =
+                    ObjectAnimator.ofFloat(
+                        screen.iconView,
+                        View.SCALE_X,
+                        0.5f,
+                        0f,
+                    )
+                val zoomY =
+                    ObjectAnimator.ofFloat(
+                        screen.iconView,
+                        View.SCALE_Y,
+                        0.5f,
+                        0f,
+                    )
+                zoomX.duration = 500
+                zoomY.duration = 500
+                zoomX.interpolator = OvershootInterpolator()
+                zoomY.interpolator = OvershootInterpolator()
+                zoomX.doOnEnd {
+                    screen.remove()
+                }
+                zoomY.doOnEnd {
+                    screen.remove()
+                }
+                zoomY.start()
+                zoomX.start()
+            }
         }
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            CourseWorkTheme {
+                val shouldShowBottomNav =
+                    remember {
+                        mutableStateOf(false)
+                    }
+                val navItems =
+                    listOf(
+                        BottomNavItem.Home,
+                        BottomNavItem.Notification,
+                        BottomNavItem.Orders,
+                    )
+                val navController = rememberNavController()
+                val notificationViewModel: NotificationsViewModel = hiltViewModel()
+                val unreadCount = notificationViewModel.unreadCount.collectAsStateWithLifecycle()
 
-        Scaffold(modifier = Modifier.fillMaxSize(),
-          bottomBar = {
-            val currentRoute =
-              navController.currentBackStackEntryAsState().value?.destination
-            AnimatedVisibility(visible = shouldShowBottomNav.value) {
-              NavigationBar(
-                containerColor = Color.White
-              ) {
-                navItems.forEach { item ->
-                  val selected =
-                    currentRoute?.hierarchy?.any { it.route == item.route::class.qualifiedName } == true
-
-                  NavigationBarItem(
-                    selected = selected,
-                    onClick = {
-                      navController.navigate(item.route)
-                    },
-                    icon = {
-                      Box(modifier = Modifier.size(48.dp)) {
-                        Icon(
-                          painter = painterResource(id = item.icon),
-                          contentDescription = null,
-                          tint = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
-                          modifier = Modifier.align(Center)
-                        )
-
-                        if (item.route == Notification && unreadCount.value > 0) {
-                          ItemCount(unreadCount.value)
+                LaunchedEffect(key1 = true) {
+                    viewModel.event.collectLatest {
+                        when (it) {
+                            is HomeViewModel.HomeEvent.NavigateToOrderDetail -> {
+                                navController.navigate(OrderDetails(it.orderID))
+                            }
                         }
-                      }
-                    })
+                    }
                 }
-              }
-            }
-          }) { innerPadding ->
 
-          SharedTransitionLayout {
-            CourseWorkNavHost(
-              navController = navController,
-              startDestination = if (session.getToken() != null) Home else AuthScreen,
-              modifier = Modifier.padding(innerPadding),
-            ) {
-              composable<SignUp> {
-                shouldShowBottomNav.value = false
-                SignUpScreen(navController)
-              }
-              composable<AuthScreen> {
-                shouldShowBottomNav.value = false
-                AuthScreen(navController, false)
-              }
-              composable<Login> {
-                shouldShowBottomNav.value = false
-                SignInScreen(navController, false)
-              }
-              composable<Home> {
-                shouldShowBottomNav.value = true
-                HomeScreen(navController)
-              }
-              composable<Notification> {
-                SideEffect {
-                  shouldShowBottomNav.value = true
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        val currentRoute =
+                            navController.currentBackStackEntryAsState().value?.destination
+                        AnimatedVisibility(visible = shouldShowBottomNav.value) {
+                            NavigationBar(
+                                containerColor = Color.White,
+                            ) {
+                                navItems.forEach { item ->
+                                    val selected =
+                                        currentRoute?.hierarchy?.any { it.route == item.route::class.qualifiedName } == true
+
+                                    NavigationBarItem(
+                                        selected = selected,
+                                        onClick = {
+                                            navController.navigate(item.route)
+                                        },
+                                        icon = {
+                                            Box(modifier = Modifier.size(48.dp)) {
+                                                Icon(
+                                                    painter = painterResource(id = item.icon),
+                                                    contentDescription = null,
+                                                    tint = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
+                                                    modifier = Modifier.align(Center),
+                                                )
+
+                                                if (item.route == Notification && unreadCount.value > 0) {
+                                                    ItemCount(unreadCount.value)
+                                                }
+                                            }
+                                        },
+                                    )
+                                }
+                            }
+                        }
+                    },
+                ) { innerPadding ->
+
+                    SharedTransitionLayout {
+                        CourseWorkNavHost(
+                            navController = navController,
+                            startDestination = if (session.getToken() != null) Home else AuthScreen,
+                            modifier = Modifier.padding(innerPadding),
+                        ) {
+                            composable<SignUp> {
+                                shouldShowBottomNav.value = false
+                                SignUpScreen(navController)
+                            }
+                            composable<AuthScreen> {
+                                shouldShowBottomNav.value = false
+                                AuthScreen(navController, false)
+                            }
+                            composable<Login> {
+                                shouldShowBottomNav.value = false
+                                SignInScreen(navController, false)
+                            }
+                            composable<Home> {
+                                shouldShowBottomNav.value = true
+                                HomeScreen(navController)
+                            }
+                            composable<Notification> {
+                                SideEffect {
+                                    shouldShowBottomNav.value = true
+                                }
+                                NotificationsList(navController, notificationViewModel)
+                            }
+                            composable<OrderList> {
+                                shouldShowBottomNav.value = true
+                                OrderListScreen(navController)
+                            }
+                            composable<OrderDetails> {
+                                shouldShowBottomNav.value = true
+                                val orderID = it.toRoute<OrderDetails>().orderId
+                                OrderDetailsScreen(orderID, navController)
+                            }
+                        }
+                    }
                 }
-                NotificationsList(navController, notificationViewModel)
-              }
-              composable<OrderList> {
-                shouldShowBottomNav.value = true
-                OrderListScreen(navController)
-              }
-              composable<OrderDetails> {
-                shouldShowBottomNav.value = true
-                val orderID = it.toRoute<OrderDetails>().orderId
-                OrderDetailsScreen(orderID, navController)
-              }
             }
-          }
-
         }
-      }
-    }
 
-    if (::foodApi.isInitialized) {
-      Log.d("MainActivity", "FoodApi initialized")
+        if (::foodApi.isInitialized) {
+            Log.d("MainActivity", "FoodApi initialized")
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(3000)
+            showSplashScreen = false
+            processIntent(intent, viewModel)
+        }
     }
-    CoroutineScope(Dispatchers.IO).launch {
-      delay(3000)
-      showSplashScreen = false
-      processIntent(intent, viewModel)
-    }
-  }
 }
 
 @Composable
 fun BoxScope.ItemCount(count: Int) {
-  Box(
-    modifier = Modifier
-      .size(16.dp)
-      .clip(CircleShape)
-      .background(Mustard)
-      .align(Alignment.TopEnd)
-  ) {
-    Text(
-      text = "${count}",
-      modifier = Modifier
-        .align(Alignment.Center),
-      color = Color.White,
-      style = TextStyle(fontSize = 10.sp)
-    )
-  }
+    Box(
+        modifier =
+        Modifier
+            .size(16.dp)
+            .clip(CircleShape)
+            .background(Mustard)
+            .align(Alignment.TopEnd),
+    ) {
+        Text(
+            text = "$count",
+            modifier =
+            Modifier
+                .align(Alignment.Center),
+            color = Color.White,
+            style = TextStyle(fontSize = 10.sp),
+        )
+    }
 }
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-  Text(
-    text = "Hello $name!",
-    modifier = modifier
-  )
+    Text(
+        text = "Hello $name!",
+        modifier = modifier,
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-  CourseWorkTheme {
-    Greeting("Android")
-  }
+    CourseWorkTheme {
+        Greeting("Android")
+    }
 }

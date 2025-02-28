@@ -7,7 +7,6 @@ class CourseWorkSession(val context: Context) {
     val sharedPres: SharedPreferences =
         context.getSharedPreferences("coursework", Context.MODE_PRIVATE)
 
-
     fun storeToken(token: String) {
         sharedPres.edit().putString("token", token).apply()
     }
