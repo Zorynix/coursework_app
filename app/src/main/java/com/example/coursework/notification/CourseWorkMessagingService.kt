@@ -2,6 +2,8 @@ package com.example.coursework.notification
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.coursework.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -17,6 +19,7 @@ class CourseWorkMessagingService : FirebaseMessagingService() {
         courseWorkNotificationManager.updateToken(token)
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         val intent = Intent(this, MainActivity::class.java)

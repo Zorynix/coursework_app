@@ -95,6 +95,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.typeOf
+import com.orhanobut.logger.Logger
 
 @AndroidEntryPoint
 class MainActivity : BaseCourseWorkActivity() {
@@ -151,6 +152,7 @@ class MainActivity : BaseCourseWorkActivity() {
                 }
                 zoomY.doOnEnd {
                     screen.remove()
+                    Logger.t("SplashScreen").d("Splash screen animation completed and removed")
                 }
                 zoomY.start()
                 zoomX.start()
@@ -181,6 +183,7 @@ class MainActivity : BaseCourseWorkActivity() {
                     viewModel.event.collectLatest {
                         when (it) {
                             is HomeViewModel.HomeEvent.NavigateToOrderDetail -> {
+                                Logger.t("Navigation").d("Navigating to OrderDetails with orderID=${it.orderID}")
                                 navController.navigate(OrderDetails(it.orderID))
                             }
                         }
@@ -202,6 +205,7 @@ class MainActivity : BaseCourseWorkActivity() {
                                     NavigationBarItem(
                                         selected = selected,
                                         onClick = {
+                                            Logger.t("Navigation").d("Bottom nav item clicked: ${item.route::class.simpleName}")
                                             navController.navigate(item.route)
                                         },
                                         icon = {
@@ -340,11 +344,15 @@ class MainActivity : BaseCourseWorkActivity() {
         }
 
         if (::foodApi.isInitialized) {
-            Log.d("MainActivity", "FoodApi initialized")
+            Logger.t("MainActivity").d("FoodApi initialized successfully")
+        } else {
+            Logger.t("MainActivity").e("FoodApi failed to initialize")
         }
+
         CoroutineScope(Dispatchers.IO).launch {
             delay(3000)
             showSplashScreen = false
+            Logger.t("MainActivity").d("Splash screen hidden after 3 seconds")
             processIntent(intent, viewModel)
         }
     }

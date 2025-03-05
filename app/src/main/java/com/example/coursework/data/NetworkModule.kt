@@ -3,6 +3,7 @@ package com.example.coursework.data
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.orhanobut.logger.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,11 +21,13 @@ object NetworkModule {
     fun provideClient(session: CourseWorkSession, @ApplicationContext context: Context): OkHttpClient {
         val client = OkHttpClient.Builder()
         client.addInterceptor { chain ->
-            val request =
-                chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${session.getToken()}")
-                    .addHeader("X-Package-Name", context.packageName)
-                    .build()
+            val token = session.getToken()
+            val packageName = context.packageName
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .addHeader("X-Package-Name", packageName)
+                .build()
+            Logger.t("OkHttpClient").d("Request headers: Authorization=Bearer $token, X-Package-Name=$packageName")
             chain.proceed(request)
         }
         client.addInterceptor(
@@ -37,11 +40,14 @@ object NetworkModule {
 
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
+        val baseUrl = "http://10.0.2.2:8080"
+        val retrofit = Retrofit.Builder()
             .client(client)
-            .baseUrl("http://10.0.2.2:8080")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+        Logger.t("Retrofit").d("Retrofit initialized with baseUrl: $baseUrl")
+        return retrofit
     }
 
     @Provides

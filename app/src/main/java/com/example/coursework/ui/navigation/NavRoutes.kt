@@ -47,3 +47,12 @@ data class OrderDetails(val orderId: String) : NavRoute
 
 @Serializable
 object OrderList : NavRoute
+
+@Serializable
+object MenuList : NavRoute
+
+@Serializable
+object AddMenu : NavRoute
+
+@Serializable
+object ImagePicker : NavRoute

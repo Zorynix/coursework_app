@@ -10,8 +10,11 @@ import com.example.coursework.data.models.CategoriesResponse
 import com.example.coursework.data.models.ConfirmPaymentRequest
 import com.example.coursework.data.models.ConfirmPaymentResponse
 import com.example.coursework.data.models.FCMRequest
+import com.example.coursework.data.models.FoodItem
+import com.example.coursework.data.models.FoodItemListResponse
 import com.example.coursework.data.models.FoodItemResponse
 import com.example.coursework.data.models.GenericMsgResponse
+import com.example.coursework.data.models.ImageUploadResponse
 import com.example.coursework.data.models.NotificationListResponse
 import com.example.coursework.data.models.OAuthRequest
 import com.example.coursework.data.models.Order
@@ -24,13 +27,16 @@ import com.example.coursework.data.models.ReverseGeoCodeRequest
 import com.example.coursework.data.models.SignInRequest
 import com.example.coursework.data.models.SignUpRequest
 import com.example.coursework.data.models.UpdateCartItemRequest
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -107,6 +113,19 @@ interface FoodApi {
     @PATCH("orders/{orderId}/status")
     suspend fun updateOrderStatus(
         @Path("orderId") orderId: String,
-        @Body map: Map<String, String>,
+        @Body map: Map<String, String>
     ): Response<GenericMsgResponse>
+
+    @GET("/restaurants/{id}/menu")
+    suspend fun getRestaurantMenu(@Path("id") restaurantId: String): Response<FoodItemListResponse>
+
+    @POST("/restaurants/{id}/menu")
+    suspend fun addRestaurantMenu(
+        @Path("id") restaurantId: String,
+        @Body foodItem: FoodItem
+    ): Response<GenericMsgResponse>
+
+    @POST("/images/upload")
+    @Multipart
+    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<ImageUploadResponse>
 }

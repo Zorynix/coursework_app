@@ -3,7 +3,6 @@ package com.example.coursework.notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.util.Log
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -19,6 +18,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.orhanobut.logger.Logger
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 @Singleton
 class CourseWorkNotificationManager @Inject constructor(
@@ -48,12 +50,15 @@ class CourseWorkNotificationManager @Inject constructor(
                     .build()
             notificationManager.createNotificationChannel(channel)
         }
+        Logger.t("NotificationManager").d("Notification channels created: ${NotificationChannelType.entries.joinToString { it.channelName }}")
     }
 
     fun getAndStoreToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             if (it.isSuccessful) {
                 updateToken(it.result)
+            } else {
+                Logger.t("FCM").e("Failed to retrieve FCM token: ${it.exception?.message}")
             }
         }
     }
@@ -61,14 +66,20 @@ class CourseWorkNotificationManager @Inject constructor(
     fun updateToken(token: String) {
         job.launch {
             val res = safeApiCall { foodApi.updateToken(FCMRequest(token)) }
-            if (res is ApiResponse.Success) {
-                Log.d("FCM_REQUEST", "${res.data.message}")
-            } else {
-                Log.d("FCM_REQUEST", "FAILED $res")
+            when (res) {
+                is ApiResponse.Success -> {
+                    Logger.t("FCM").d("Token updated successfully: ${res.data.message}")
+                }
+                is ApiResponse.Error -> {
+                    Logger.t("FCM").e("Failed to update token: ${res.message}")
+                }
+
+                is ApiResponse.Exception -> TODO()
             }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun showNotification(
         title: String,
         message: String,
@@ -86,5 +97,10 @@ class CourseWorkNotificationManager @Inject constructor(
                 .build()
 
         notificationManager.notify(notificationID, notification)
+
+        Logger.t("NotificationManager").d(
+            "Notification shown: id=$notificationID, title='$title', message='$message', channel=${notificationChannelType.channelName}"
+        )
+
     }
 }

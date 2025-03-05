@@ -10,6 +10,7 @@ import com.example.coursework.GoogleServerClientID
 import com.example.coursework.data.models.GoogleAccount
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.orhanobut.logger.Logger
 
 class GoogleAuthUiProvider {
     suspend fun signIn(activityContext: Context, credentialManager: CredentialManager): GoogleAccount {
@@ -25,7 +26,7 @@ class GoogleAuthUiProvider {
         when {
             creds is CustomCredential && creds.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> {
                 val googleIdTokenCredential = creds as GoogleIdTokenCredential
-                Log.d("GoogleAuthUiProvider", "GoogleIdTokenCredential: $googleIdTokenCredential")
+                Logger.t("GoogleAuthUiProvider").d("GoogleIdTokenCredential: $googleIdTokenCredential")
                 return GoogleAccount(
                     token = googleIdTokenCredential.idToken,
                     displayName = googleIdTokenCredential.displayName ?: "",
