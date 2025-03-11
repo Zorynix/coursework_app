@@ -78,6 +78,21 @@ android {
 
 dependencies {
 
+    val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
+    implementation(libs.material3)
+    implementation(libs.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    androidTestImplementation(libs.ui.test.junit4)
+    implementation(libs.androidx.material.icons.core)
+    debugImplementation(libs.ui.test.manifest)
+    implementation(libs.androidx.adaptive)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.activity.compose.v1100)
+    implementation(libs.androidx.runtime.rxjava2)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -112,6 +127,7 @@ dependencies {
 
     implementation(libs.facebook.login)
     implementation(libs.coil.compose)
+    implementation(libs.ui)
     implementation(libs.coil.network.okhttp)
     implementation(libs.maps.compose)
     implementation(libs.play.services.location)

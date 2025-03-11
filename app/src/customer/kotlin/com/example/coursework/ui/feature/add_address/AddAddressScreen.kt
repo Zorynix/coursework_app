@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -28,12 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.coursework.ui.theme.Text
+import com.example.coursework.ui.theme.TextStyle
+import com.example.coursework.ui.theme.Theme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -45,7 +45,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewModel = hiltViewModel(),) {
+fun AddAddressScreen(navController: NavController, modifier: Modifier = Modifier, viewModel: AddAddressViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = true) {
@@ -80,14 +80,14 @@ fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewMode
     })
     if (!isPermissionGranted.value) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CircularProgressIndicator()
         }
     } else {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = modifier.fillMaxSize()) {
             val location = viewModel.getLocation().collectAsStateWithLifecycle(initialValue = null)
             location.value?.let {
                 val cameraState = rememberCameraPositionState()
@@ -146,7 +146,7 @@ fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewMode
                             .clip(
                                 RoundedCornerShape(8.dp),
                             )
-                            .background(Color.White)
+                            .background(Theme.extendedColorScheme.backgroundBox)
                             .clickable { }
                             .padding(16.dp)
                             .align(Alignment.BottomCenter),
@@ -158,18 +158,18 @@ fun AddAddressScreen(navController: NavController, viewModel: AddAddressViewMode
                                 } else if (uiState.value is AddAddressViewModel.AddAddressState.Error) {
                                     Text(
                                         text = (uiState.value as AddAddressViewModel.AddAddressState.Error).message,
-                                        style = MaterialTheme.typography.titleMedium,
+                                        style = TextStyle.titleMedium,
                                     )
                                 } else {
                                     Text(
                                         text = it.addressLine1,
-                                        style = MaterialTheme.typography.titleMedium,
+                                        style = TextStyle.titleMedium,
                                     )
                                     Spacer(modifier = Modifier.size(4.dp))
                                     Text(
                                         text = "${it.city}, ${it.state}, ${it.country}",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = Color.Gray,
+                                        style = TextStyle.bodyMedium,
+                                        color = Theme.extendedColorScheme.onBackgroundHint,
                                     )
                                 }
                             }

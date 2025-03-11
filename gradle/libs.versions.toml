@@ -1,4 +1,6 @@
 [versions]
+accompanistSystemuicontrollerVersion = "0.34.0"
+activityComposeVersion = "1.10.0"
 agp = "8.5.2"
 coilCompose = "3.0.4"
 converterGson = "2.11.0"
@@ -22,6 +24,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.02.00"
 coreSplashscreenVersion = "1.0.1"
+lifecycleViewmodelComposeVersion = "2.8.7"
 loggerVersion = "2.2.0"
 loggingInterceptor = "4.12.0"
 mapsCompose = "6.1.1"
@@ -32,13 +35,20 @@ animationCompose = "1.7.8"
 foundationCompose = "1.7.8"
 stripeAndroid = "20.53.0"
 composeMaterial = "1.4.1"
+uiVersion = "1.7.8"
 
 [libraries]
+androidx-activity-compose-v1100 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
+androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelComposeVersion" }
+androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
+androidx-runtime-rxjava2 = { module = "androidx.compose.runtime:runtime-rxjava2" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
@@ -46,6 +56,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx" }
+google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontrollerVersion" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
@@ -71,6 +82,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+material3 = { module = "androidx.compose.material3:material3" }
 org-jetbrains-kotlin-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
 orhanobut-logger = { module = "com.orhanobut:logger", version.ref = "loggerVersion" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
@@ -79,6 +91,11 @@ androidx-animation = { group = "androidx.compose.animation", name = "animation",
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundationCompose" }
 stripe-android = { module = "com.stripe:stripe-android", version.ref = "stripeAndroid" }
 androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
+ui = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 
 [plugins]

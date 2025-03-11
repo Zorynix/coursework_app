@@ -21,8 +21,9 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +41,8 @@ import com.example.coursework.R
 import com.example.coursework.ui.features.common.FoodItemView
 import com.example.coursework.ui.gridItems
 import com.example.coursework.ui.navigation.FoodDetails
+import com.example.coursework.ui.theme.TextStyle
+import com.example.coursework.ui.theme.Theme
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -126,7 +129,7 @@ fun SharedTransitionScope.RestaurantDetails(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleLarge,
+            style = TextStyle.titleLarge,
             modifier = Modifier.sharedElement(
                 state = rememberSharedContentState(key = "title/${restaurantID}"),
                 animatedVisibilityScope
@@ -143,20 +146,20 @@ fun SharedTransitionScope.RestaurantDetails(
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = "4.5",
-                style = MaterialTheme.typography.bodyMedium,
+                style = TextStyle.bodyMedium,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = "(30+)",
-                style = MaterialTheme.typography.bodyMedium,
+                style = TextStyle.titleMedium,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
             Spacer(modifier = Modifier.size(8.dp))
             TextButton(onClick = { /*TODO*/ }) {
                 Text(
                     text = " Показать все оценки",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = TextStyle.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
@@ -165,7 +168,7 @@ fun SharedTransitionScope.RestaurantDetails(
         Spacer(modifier = Modifier.size(8.dp))
         Text(
             text = description,
-            style = MaterialTheme.typography.bodyMedium,
+            style = TextStyle.bodyMedium,
             modifier = Modifier.padding(top = 8.dp)
         )
     }
@@ -177,10 +180,11 @@ fun SharedTransitionScope.RestaurantDetailsHeader(
     imageUrl: String,
     restaurantID: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    modifier: Modifier = Modifier,
     onBackButton: () -> Unit,
     onFavoriteButton: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = modifier.fillMaxWidth()) {
         AsyncImage(
             model = imageUrl, contentDescription = null, modifier = Modifier
                 .fillMaxWidth()
@@ -195,12 +199,17 @@ fun SharedTransitionScope.RestaurantDetailsHeader(
         )
         IconButton(
             onClick = onBackButton,
+            colors = IconButtonColors(
+                containerColor = Theme.extendedColorScheme.backgroundBox,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                disabledContainerColor = Theme.extendedColorScheme.backgroundBox,
+                disabledContentColor = MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
                 .padding(16.dp)
                 .size(48.dp)
                 .align(Alignment.TopStart)
         ) {
-            Image(painter = painterResource(id = R.drawable.back), contentDescription = null)
+            Icon(painter = painterResource(id = R.drawable.back), contentDescription = null, tint = MaterialTheme.colorScheme.onBackground)
         }
         IconButton(
             onClick = onFavoriteButton,

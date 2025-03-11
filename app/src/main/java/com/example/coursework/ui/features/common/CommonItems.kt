@@ -22,7 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.coursework.R
 import com.example.coursework.data.models.FoodItem
+import com.example.coursework.ui.theme.TextStyle
+import com.example.coursework.ui.theme.Theme
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -49,15 +51,9 @@ fun SharedTransitionScope.FoodItemView(
             .padding(8.dp)
             .width(162.dp)
             .height(216.dp)
-            .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(16.dp),
-                ambientColor = Color.Gray.copy(alpha = 0.8f),
-                spotColor = Color.Gray.copy(alpha = 0.8f)
-            )
-            .background(Color.White)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Theme.extendedColorScheme.backgroundBox)
             .clickable { onClick.invoke(footItem) }
-            .clip(RoundedCornerShape(16.dp))
     ) {
         Box(
             modifier = Modifier
@@ -77,11 +73,11 @@ fun SharedTransitionScope.FoodItemView(
             )
             Text(
                 text = "$${footItem.price}",
-                style = MaterialTheme.typography.bodySmall,
+                style = TextStyle.bodySmall,
                 modifier = Modifier
                     .padding(8.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White)
+                    .background(Theme.extendedColorScheme.backgroundBox)
                     .padding(horizontal = 16.dp)
                     .align(Alignment.TopStart)
             )
@@ -89,7 +85,8 @@ fun SharedTransitionScope.FoodItemView(
                 painter = painterResource(id = R.drawable.favorite),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(28.dp)
+                    .size(48.dp)
+                    .padding(8.dp)
                     .clip(CircleShape)
                     .align(Alignment.TopEnd)
             )
@@ -99,24 +96,25 @@ fun SharedTransitionScope.FoodItemView(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White)
+                    .background(Theme.extendedColorScheme.backgroundBox)
                     .padding(horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "4.5", style = MaterialTheme.typography.titleSmall, maxLines = 1
+                    text = "4.5", style = TextStyle.titleSmall, maxLines = 1
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Icon(
                     imageVector = Icons.Filled.Star,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     contentDescription = null,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     text = "(21)",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
+                    style = TextStyle.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1
                 )
             }
@@ -128,7 +126,7 @@ fun SharedTransitionScope.FoodItemView(
                 .fillMaxWidth()
         ) {
             Text(
-                text = footItem.name, style = MaterialTheme.typography.bodyMedium, maxLines = 1,
+                text = footItem.name, style = TextStyle.bodyMedium, maxLines = 1,
                 modifier = Modifier.sharedElement(
                     state = rememberSharedContentState(key = "title/${footItem.id}"),
                     animatedVisibilityScope
@@ -136,8 +134,8 @@ fun SharedTransitionScope.FoodItemView(
             )
             Text(
                 text = "${footItem.description}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray,
+                style = TextStyle.bodyMedium,
+                color = Theme.extendedColorScheme.onBackgroundHint,
                 maxLines = 1
             )
         }

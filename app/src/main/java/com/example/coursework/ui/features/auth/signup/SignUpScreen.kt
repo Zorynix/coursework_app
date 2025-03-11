@@ -56,6 +56,7 @@ import com.example.coursework.ui.navigation.AuthScreen
 import com.example.coursework.ui.navigation.Home
 import com.example.coursework.ui.navigation.Login
 import com.example.coursework.ui.theme.Primary
+import com.example.coursework.ui.theme.Theme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -140,7 +141,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                 value = name.value,
                 onValueChange = { viewModel.onNameChange(it) },
                 label = {
-                    Text(text = stringResource(id = R.string.full_name), color = Color.Gray)
+                    Text(text = stringResource(id = R.string.full_name), color = Theme.extendedColorScheme.onBackgroundHint)
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -148,7 +149,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                 value = email.value,
                 onValueChange = { viewModel.onEmailChange(it) },
                 label = {
-                    Text(text = stringResource(id = R.string.email), color = Color.Gray)
+                    Text(text = stringResource(id = R.string.email), color = Theme.extendedColorScheme.onBackgroundHint)
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -156,7 +157,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                 value = password.value,
                 onValueChange = { viewModel.onPasswordChange(it) },
                 label = {
-                    Text(text = stringResource(id = R.string.password), color = Color.Gray)
+                    Text(text = stringResource(id = R.string.password), color = Theme.extendedColorScheme.onBackgroundHint)
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -206,7 +207,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
             )
-            GroupSocialButtons(color = Color.Black, viewModel)
+            GroupSocialButtons(color = Color.Black, viewModel = viewModel)
         }
     }
     if (showDialog) {

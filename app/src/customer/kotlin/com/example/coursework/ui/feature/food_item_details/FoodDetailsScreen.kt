@@ -21,7 +21,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +39,7 @@ import com.example.coursework.ui.BasicDialog
 import com.example.coursework.ui.feature.restaurant_details.RestaurantDetails
 import com.example.coursework.ui.feature.restaurant_details.RestaurantDetailsHeader
 import com.example.coursework.ui.navigation.Cart
+import com.example.coursework.ui.theme.TextStyle
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
@@ -74,7 +75,7 @@ fun SharedTransitionScope.FoodDetailsScreen(
             isLoading.value = false
         }
     }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(onItemAddedToCart) {
         viewModel.event.collectLatest {
             when (it) {
                 is FoodDetailsViewModel.FoodDetailsEvent.onAddToCart -> {
@@ -121,7 +122,7 @@ fun SharedTransitionScope.FoodDetailsScreen(
             Text(
                 text = "$ ${foodItem.price}",
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineLarge,
+                style = TextStyle.titleMedium, //headlinelarge???
             )
             Spacer(modifier = Modifier.weight(1f))
             FoodItemCounter(
@@ -162,7 +163,7 @@ fun SharedTransitionScope.FoodDetailsScreen(
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
                             text = "Добаить в корзину".uppercase(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = TextStyle.bodyMedium,
                         )
                     }
                 }
@@ -183,7 +184,7 @@ fun SharedTransitionScope.FoodDetailsScreen(
             ) {
                 Text(
                     text = "Блюдо добавлено в корзину",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = TextStyle.titleLarge,
                 )
                 Spacer(modifier = Modifier.size(16.dp))
                 Button(
@@ -228,8 +229,8 @@ fun SharedTransitionScope.FoodDetailsScreen(
 }
 
 @Composable
-fun FoodItemCounter(onCounterIncrement: () -> Unit, onCounterDecrement: () -> Unit, count: Int) {
-    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+fun FoodItemCounter(modifier: Modifier = Modifier, onCounterIncrement: () -> Unit, onCounterDecrement: () -> Unit, count: Int) {
+    Row(modifier = modifier, verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
         Image(
             painter = painterResource(id = R.drawable.add),
             contentDescription = null,
@@ -239,7 +240,7 @@ fun FoodItemCounter(onCounterIncrement: () -> Unit, onCounterDecrement: () -> Un
                 .clickable { onCounterIncrement.invoke() },
         )
         Spacer(modifier = Modifier.size(8.dp))
-        Text(text = "$count", style = MaterialTheme.typography.titleMedium)
+        Text(text = "$count", style = TextStyle.titleMedium)
         Spacer(modifier = Modifier.size(8.dp))
         Image(
             painter = painterResource(id = R.drawable.minus),

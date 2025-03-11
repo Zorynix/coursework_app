@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -28,6 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.coursework.R
 import com.example.coursework.ui.feature.orders.OrderDetailsText
+import com.example.coursework.ui.theme.Text
+import com.example.coursework.ui.theme.TextStyle
 import com.example.coursework.utils.StringUtils
 import kotlinx.coroutines.flow.collectLatest
 
@@ -36,6 +36,7 @@ fun OrderDetailsScreen(
     navController: NavController,
     orderID: String,
     viewModel: OrderDetailsViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(key1 = orderID) {
         viewModel.getOrderDetails(orderID)
@@ -51,7 +52,7 @@ fun OrderDetailsScreen(
         }
     }
 
-    Column {
+    Column(modifier = modifier) {
         Row(
             modifier =
             Modifier
@@ -71,7 +72,7 @@ fun OrderDetailsScreen(
                     },
                 contentDescription = "Назад",
             )
-            Text(text = "Детали заказа", style = MaterialTheme.typography.titleMedium)
+            Text(text = "Детали заказа", style = TextStyle.titleMedium)
             Spacer(modifier = Modifier.size(48.dp))
         }
         val uiState = viewModel.state.collectAsStateWithLifecycle()

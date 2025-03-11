@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.android.application) apply false
     id("com.google.dagger.hilt.android") version "2.55" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.5.21" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10" apply false
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("com.google.gms.google-services") version "4.4.2" apply false
@@ -13,20 +13,19 @@ detekt {
     toolVersion = "1.23.8"
     config.setFrom(file("$rootDir/detekt.yml"))
     parallel = true
-    buildUponDefaultConfig = true
     source.setFrom(
         "app/src/main/java",
         "app/src/customer/kotlin",
         "app/src/restaurant/kotlin",
         "app/src/rider/kotlin",
     )
-    allRules = true
     autoCorrect = true
-    baseline = file("$rootDir/detekt-baseline.xml")
 }
 
 dependencies {
     detektPlugins(libs.detekt.formatting)
+    detektPlugins("io.nlopez.compose.rules:detekt:0.4.22")
+    detektPlugins("ru.kode:detekt-rules-compose:1.4.0")
 }
 
 subprojects {
@@ -58,13 +57,5 @@ tasks {
         description = "Checks code with ktlint and Detekt"
         group = "verification"
         dependsOn(":ktlintCheck", ":detekt")
-    }
-
-    named("detekt") {
-        val baselineFile = file("$rootDir/detekt-baseline.xml")
-        if (!baselineFile.exists()) {
-            println("Baseline file not found, generating detekt-baseline.xml...")
-            dependsOn("detektBaseline")
-        }
     }
 }

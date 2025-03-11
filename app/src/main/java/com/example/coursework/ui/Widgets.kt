@@ -66,7 +66,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 @Composable
-fun GroupSocialButtons(color: Color = Color.White, viewModel: BaseAuthViewModel,) {
+fun GroupSocialButtons(viewModel: BaseAuthViewModel, color: Color = Color.White) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -115,8 +115,9 @@ fun GroupSocialButtons(color: Color = Color.White, viewModel: BaseAuthViewModel,
 }
 
 @Composable
-fun SocialButton(icon: Int, title: Int, onClick: () -> Unit,) {
+fun SocialButton(icon: Int, title: Int, modifier: Modifier = Modifier, onClick: () -> Unit,) {
     Button(
+        modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
         shape = RoundedCornerShape(32.dp),
@@ -140,8 +141,8 @@ fun SocialButton(icon: Int, title: Int, onClick: () -> Unit,) {
 }
 
 @Composable
-fun BasicDialog(title: String, description: String, onClick: () -> Unit) {
-    Surface {
+fun BasicDialog(title: String, description: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Surface(modifier = modifier) {
         Column(
             modifier =
             Modifier

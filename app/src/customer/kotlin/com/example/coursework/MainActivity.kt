@@ -2,7 +2,6 @@ package com.example.coursework
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.activity.compose.setContent
@@ -25,11 +24,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -38,7 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import com.example.coursework.ui.theme.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,69 +88,44 @@ import com.example.coursework.ui.navigation.SignUp
 import com.example.coursework.ui.navigation.foodItemNavType
 import com.example.coursework.ui.theme.CourseWorkTheme
 import com.example.coursework.ui.theme.Mustard
+import com.example.coursework.ui.theme.Theme
+import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlin.reflect.typeOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import kotlin.reflect.typeOf
-import com.orhanobut.logger.Logger
 
 @AndroidEntryPoint
 class MainActivity : BaseCourseWorkActivity() {
     var showSplashScreen = true
 
-    @Inject
-    lateinit var foodApi: FoodApi
+    @Inject lateinit var foodApi: FoodApi
 
-    @Inject
-    lateinit var session: CourseWorkSession
+    @Inject lateinit var session: CourseWorkSession
 
     sealed class BottomNavItem(val route: NavRoute, val icon: Int) {
         object Home : BottomNavItem(com.example.coursework.ui.navigation.Home, R.drawable.ic_home)
         object Cart : BottomNavItem(com.example.coursework.ui.navigation.Cart, R.drawable.ic_cart)
-        object Notification :
-            BottomNavItem(
-                com.example.coursework.ui.navigation.Notification,
-                R.drawable.ic_notification,
-            )
-
-        object Orders : BottomNavItem(
-            OrderList,
-            R.drawable.ic_orders,
-        )
+        object Notification : BottomNavItem(com.example.coursework.ui.navigation.Notification, R.drawable.ic_notification)
+        object Orders : BottomNavItem(OrderList, R.drawable.ic_orders)
     }
 
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
-            setKeepOnScreenCondition {
-                showSplashScreen
-            }
+            setKeepOnScreenCondition { showSplashScreen }
             setOnExitAnimationListener { screen ->
-                val zoomX =
-                    ObjectAnimator.ofFloat(
-                        screen.iconView,
-                        View.SCALE_X,
-                        0.5f,
-                        0f,
-                    )
-                val zoomY =
-                    ObjectAnimator.ofFloat(
-                        screen.iconView,
-                        View.SCALE_Y,
-                        0.5f,
-                        0f,
-                    )
+                val zoomX = ObjectAnimator.ofFloat(screen.iconView, View.SCALE_X, 0.5f, 0f)
+                val zoomY = ObjectAnimator.ofFloat(screen.iconView, View.SCALE_Y, 0.5f, 0f)
                 zoomX.duration = 500
                 zoomY.duration = 500
                 zoomX.interpolator = OvershootInterpolator()
                 zoomY.interpolator = OvershootInterpolator()
-                zoomX.doOnEnd {
-                    screen.remove()
-                }
+                zoomX.doOnEnd { screen.remove() }
                 zoomY.doOnEnd {
                     screen.remove()
                     Logger.t("SplashScreen").d("Splash screen animation completed and removed")
@@ -161,18 +137,20 @@ class MainActivity : BaseCourseWorkActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CourseWorkTheme {
-                val shouldShowBottomNav =
-                    remember {
-                        mutableStateOf(false)
-                    }
-                val navItems =
-                    listOf(
-                        BottomNavItem.Home,
-                        BottomNavItem.Cart,
-                        BottomNavItem.Notification,
-                        BottomNavItem.Orders,
-                    )
+
+            val themeViewModel: ThemeViewModel = hiltViewModel()
+
+            val theme by themeViewModel.currentTheme.collectAsStateWithLifecycle()
+
+
+            CourseWorkTheme(theme = theme) {
+                val shouldShowBottomNav = remember { mutableStateOf(false) }
+                val navItems = listOf(
+                    BottomNavItem.Home,
+                    BottomNavItem.Cart,
+                    BottomNavItem.Notification,
+                    BottomNavItem.Orders,
+                )
                 val navController = rememberNavController()
                 val cartViewModel: CartViewModel = hiltViewModel()
                 val cartItemSize = cartViewModel.cartItemCount.collectAsStateWithLifecycle()
@@ -192,18 +170,25 @@ class MainActivity : BaseCourseWorkActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        val currentRoute =
-                            navController.currentBackStackEntryAsState().value?.destination
+                        val currentRoute = navController.currentBackStackEntryAsState().value?.destination
                         AnimatedVisibility(visible = shouldShowBottomNav.value) {
-                            NavigationBar(
-                                containerColor = Color.White,
-                            ) {
+                            NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
                                 navItems.forEach { item ->
-                                    val selected =
-                                        currentRoute?.hierarchy?.any { it.route == item.route::class.qualifiedName } == true
+                                    val selected = currentRoute?.hierarchy?.any {
+                                        it.route == item.route::class.qualifiedName
+                                    } == true
 
                                     NavigationBarItem(
                                         selected = selected,
+                                        colors = NavigationBarItemColors(
+                                            selectedIconColor = Color.Unspecified,
+                                            disabledIconColor = Color.Unspecified,
+                                            disabledTextColor = Color.Unspecified,
+                                            selectedIndicatorColor = Color.Unspecified,
+                                            selectedTextColor = Color.Unspecified,
+                                            unselectedIconColor = Color.Unspecified,
+                                            unselectedTextColor = Color.Unspecified,
+                                        ),
                                         onClick = {
                                             Logger.t("Navigation").d("Bottom nav item clicked: ${item.route::class.simpleName}")
                                             navController.navigate(item.route)
@@ -213,10 +198,9 @@ class MainActivity : BaseCourseWorkActivity() {
                                                 Icon(
                                                     painter = painterResource(id = item.icon),
                                                     contentDescription = null,
-                                                    tint = if (selected) MaterialTheme.colorScheme.primary else Color.Gray,
+                                                    tint = if (selected) MaterialTheme.colorScheme.primary else Theme.extendedColorScheme.onBackgroundHint,
                                                     modifier = Modifier.align(Center),
                                                 )
-
                                                 if (item.route == Cart && cartItemSize.value > 0) {
                                                     ItemCount(cartItemSize.value)
                                                 }
@@ -231,7 +215,6 @@ class MainActivity : BaseCourseWorkActivity() {
                         }
                     },
                 ) { innerPadding ->
-
                     SharedTransitionLayout {
                         NavHost(
                             navController = navController,
@@ -289,9 +272,7 @@ class MainActivity : BaseCourseWorkActivity() {
                                     this,
                                 )
                             }
-                            composable<FoodDetails>(
-                                typeMap = mapOf(typeOf<FoodItem>() to foodItemNavType),
-                            ) {
+                            composable<FoodDetails>(typeMap = mapOf(typeOf<FoodItem>() to foodItemNavType)) {
                                 shouldShowBottomNav.value = false
                                 val route = it.toRoute<FoodDetails>()
                                 FoodDetailsScreen(
@@ -301,15 +282,12 @@ class MainActivity : BaseCourseWorkActivity() {
                                     onItemAddedToCart = { cartViewModel.getCart() },
                                 )
                             }
-
                             composable<Cart> {
                                 shouldShowBottomNav.value = true
                                 CartScreen(navController, cartViewModel)
                             }
                             composable<Notification> {
-                                SideEffect {
-                                    shouldShowBottomNav.value = true
-                                }
+                                SideEffect { shouldShowBottomNav.value = true }
                                 NotificationsList(navController, notificationViewModel)
                             }
                             composable<AddressList> {
@@ -329,11 +307,8 @@ class MainActivity : BaseCourseWorkActivity() {
                                 shouldShowBottomNav.value = true
                                 OrderListScreen(navController)
                             }
-
                             composable<OrderDetails> {
-                                SideEffect {
-                                    shouldShowBottomNav.value = false
-                                }
+                                SideEffect { shouldShowBottomNav.value = false }
                                 val orderID = it.toRoute<OrderDetails>().orderId
                                 OrderDetailsScreen(navController, orderID)
                             }
@@ -359,22 +334,18 @@ class MainActivity : BaseCourseWorkActivity() {
 }
 
 @Composable
-fun BoxScope.ItemCount(count: Int) {
+fun BoxScope.ItemCount(
+    count: Int,
+    modifier: Modifier = Modifier,
+) {
     Box(
-        modifier =
-        Modifier
-            .size(16.dp)
-            .clip(CircleShape)
-            .background(Mustard)
-            .align(Alignment.TopEnd),
+        modifier = modifier.size(16.dp).clip(CircleShape).background(Mustard).align(Alignment.TopEnd),
     ) {
         Text(
             text = "$count",
-            modifier =
-            Modifier
-                .align(Center),
-            color = Color.White,
-            style = TextStyle(fontSize = 10.sp),
+            modifier = Modifier.align(Center),
+            color = Theme.extendedColorScheme.onBackgroundHint,
+            style = TextStyle.bodySmall,
         )
     }
 }
@@ -390,7 +361,5 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    CourseWorkTheme {
-        Greeting("Android")
-    }
+    CourseWorkTheme { Greeting("Android") }
 }

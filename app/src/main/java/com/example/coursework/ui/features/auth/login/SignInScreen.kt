@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -56,6 +57,7 @@ import com.example.coursework.ui.navigation.AuthScreen
 import com.example.coursework.ui.navigation.Home
 import com.example.coursework.ui.navigation.SignUp
 import com.example.coursework.ui.theme.Primary
+import com.example.coursework.ui.theme.Theme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -144,7 +146,7 @@ fun SignInScreen(
                 value = email.value,
                 onValueChange = { viewModel.onEmailChange(it) },
                 label = {
-                    Text(text = stringResource(id = R.string.email), color = Color.Gray)
+                    Text(text = stringResource(id = R.string.email), color = Theme.extendedColorScheme.onBackgroundHint)
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -152,7 +154,7 @@ fun SignInScreen(
                 value = password.value,
                 onValueChange = { viewModel.onPasswordChange(it) },
                 label = {
-                    Text(text = stringResource(id = R.string.password), color = Color.Gray)
+                    Text(text = stringResource(id = R.string.password), color = Theme.extendedColorScheme.onBackgroundHint)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
@@ -181,7 +183,7 @@ fun SignInScreen(
                     ) { target ->
                         if (target) {
                             CircularProgressIndicator(
-                                color = Color.White,
+                                color = Theme.extendedColorScheme.onBackgroundHint,
                                 modifier =
                                 Modifier
                                     .padding(horizontal = 32.dp)
@@ -190,7 +192,7 @@ fun SignInScreen(
                         } else {
                             Text(
                                 text = stringResource(id = R.string.sign_in),
-                                color = Color.White,
+                                color = Theme.extendedColorScheme.onBackgroundHint,
                                 modifier = Modifier.padding(horizontal = 32.dp),
                             )
                         }
@@ -212,7 +214,7 @@ fun SignInScreen(
                 )
                 val context = LocalContext.current
                 GroupSocialButtons(
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.background,
                     viewModel = viewModel,
                 )
             }

@@ -20,10 +20,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +43,8 @@ import com.example.coursework.R
 import com.example.coursework.data.models.Order
 import com.example.coursework.ui.features.orders.OrderListViewModel
 import com.example.coursework.ui.navigation.OrderDetails
+import com.example.coursework.ui.theme.TextStyle
+import com.example.coursework.ui.theme.Theme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -73,19 +76,19 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
+            Icon(
+                tint = MaterialTheme.colorScheme.onBackground,
                 painter = painterResource(id = R.drawable.back),
                 modifier =
                 Modifier
-                    .shadow(12.dp, clip = true, shape = CircleShape)
                     .clip(CircleShape)
                     .clickable {
                         viewModel.navigateBack()
                     },
                 contentDescription = "Назад",
             )
-            Text(text = "Заказы", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.size(48.dp))
+            Text(text = "Заказы", style = TextStyle.titleLarge)
+            Spacer(modifier = Modifier.size(24.dp))
         }
         when (uiState.value) {
             is OrderListViewModel.OrderListState.Loading -> {
@@ -133,8 +136,9 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
                             Tab(
                                 text = {
                                     Text(
+
                                         text = title,
-                                        color = if (pagerState.currentPage == index) Color.White else Color.Gray,
+                                        color = if (pagerState.currentPage == index) Color.White else Theme.extendedColorScheme.onBackgroundHint,
                                     )
                                 },
                                 selected = pagerState.currentPage == index,
@@ -198,17 +202,17 @@ fun OrderListScreen(navController: NavController, viewModel: OrderListViewModel 
 }
 
 @Composable
-fun OrderListInternal(list: List<Order>, onClick: (Order) -> Unit) {
+fun OrderListInternal(list: List<Order>, modifier: Modifier = Modifier, onClick: (Order) -> Unit) {
     if (list.isEmpty()) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
         ) {
             Text(text = "Заказы не найдены")
         }
     } else {
-        LazyColumn {
+        LazyColumn(modifier = modifier) {
             items(list) { order ->
                 OrderListItem(order = order, onClick = { onClick(order) })
             }
@@ -217,8 +221,8 @@ fun OrderListInternal(list: List<Order>, onClick: (Order) -> Unit) {
 }
 
 @Composable
-fun OrderDetailsText(order: Order) {
-    Column {
+fun OrderDetailsText(order: Order, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -238,33 +242,32 @@ fun OrderDetailsText(order: Order) {
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = TextStyle.bodyMedium,
                     maxLines = 1,
                 )
-                Text(text = "${order.items.size} блюд", color = Color.Gray)
+                Text(text = "${order.items.size} блюд", color = Theme.extendedColorScheme.onBackgroundHint)
                 Text(
                     text = order.restaurant.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black,
+                    style = TextStyle.titleMedium,
                 )
             }
         }
-        Text(text = "Статус", color = Color.Gray)
-        Text(text = order.status, color = Color.Black)
+        Text(text = "Статус", color = Theme.extendedColorScheme.onBackgroundHint)
+        Text(text = order.status)
         Spacer(modifier = Modifier.size(16.dp))
     }
 }
 
 @Composable
-fun OrderListItem(order: Order, onClick: () -> Unit) {
+fun OrderListItem(order: Order, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
         modifier =
-        Modifier
+        modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .fillMaxWidth()
             .shadow(8.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(color = androidx.compose.ui.graphics.Color.White)
+            .background(Theme.extendedColorScheme.backgroundBox)
             .padding(16.dp),
     ) {
         OrderDetailsText(order = order)

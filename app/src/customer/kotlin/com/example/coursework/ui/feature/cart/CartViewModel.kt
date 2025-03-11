@@ -7,11 +7,13 @@ import com.example.coursework.data.models.Address
 import com.example.coursework.data.models.CartItem
 import com.example.coursework.data.models.CartResponse
 import com.example.coursework.data.models.ConfirmPaymentRequest
+import com.example.coursework.data.models.Order
 import com.example.coursework.data.models.PaymentIntentRequest
 import com.example.coursework.data.models.PaymentIntentResponse
 import com.example.coursework.data.models.UpdateCartItemRequest
 import com.example.coursework.data.remote.ApiResponse
 import com.example.coursework.data.remote.safeApiCall
+import com.example.coursework.ui.features.orders.OrderListViewModel.OrderListEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -74,6 +76,12 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
             return
         }
         updateItemQuantity(cartItem, cartItem.quantity - 1)
+    }
+
+    fun navigateBack() {
+        viewModelScope.launch {
+            _event.emit(CartEvent.NavigateBack)
+        }
     }
 
     private fun updateItemQuantity(cartItem: CartItem, quantity: Int) {
@@ -199,6 +207,7 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
     }
 
     sealed class CartEvent {
+        data class NavigateToLastScreen(val order: Order) : CartEvent()
         object showErrorDialog : CartEvent()
         data class OrderSuccess(val orderId: String?) : CartEvent()
         object OnCheckout : CartEvent()
@@ -206,5 +215,6 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
         object onQuantityUpdateError : CartEvent()
         object onItemRemoveError : CartEvent()
         object onAddressClicked : CartEvent()
+        object NavigateBack : CartEvent()
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -51,6 +52,7 @@ import com.example.coursework.ui.navigation.Home
 import com.example.coursework.ui.navigation.Login
 import com.example.coursework.ui.navigation.SignUp
 import com.example.coursework.ui.theme.Primary
+import com.example.coursework.ui.theme.Theme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -58,6 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AuthScreen(
     navController: NavController,
+    modifier: Modifier = Modifier,
     isCustomer: Boolean = true,
     viewModel: AuthScreenViewModel = hiltViewModel(),
 ) {
@@ -101,9 +104,9 @@ fun AuthScreen(
 
     Box(
         modifier =
-        Modifier
+        modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(MaterialTheme.colorScheme.background),
     ) {
         Image(
             painter = painterResource(id = R.drawable.background),
@@ -184,7 +187,7 @@ fun AuthScreen(
                         navController.navigate(SignUp)
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray.copy(alpha = 0.2f)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Theme.extendedColorScheme.onBackgroundHint.copy(alpha = 0.2f)),
                     shape = RoundedCornerShape(32.dp),
                     border = BorderStroke(1.dp, Color.White),
                 ) {

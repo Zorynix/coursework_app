@@ -16,14 +16,11 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,10 +29,13 @@ import androidx.navigation.NavController
 import com.example.coursework.R
 import com.example.coursework.ui.feature.cart.AddressCard
 import com.example.coursework.ui.navigation.AddAddress
+import com.example.coursework.ui.theme.Text
+import com.example.coursework.ui.theme.TextStyle
+import com.example.coursework.ui.theme.Theme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun AddressListScreen(navController: NavController, viewModel: AddressListViewModel = hiltViewModel()) {
+fun AddressListScreen(navController: NavController, modifier: Modifier = Modifier, viewModel: AddressListViewModel = hiltViewModel()) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {
         viewModel.event.collectLatest {
@@ -67,7 +67,7 @@ fun AddressListScreen(navController: NavController, viewModel: AddressListViewMo
             viewModel.getAddress()
         }
     }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -82,7 +82,7 @@ fun AddressListScreen(navController: NavController, viewModel: AddressListViewMo
                 },
             )
 
-            Text(text = "Адреса", style = MaterialTheme.typography.titleMedium)
+            Text(text = "Адреса", style = TextStyle.titleMedium)
             Icon(
                 imageVector = Icons.Filled.AddCircle,
                 contentDescription = null,
@@ -105,8 +105,8 @@ fun AddressListScreen(navController: NavController, viewModel: AddressListViewMo
                     CircularProgressIndicator()
                     Text(
                         text = "Загрузка..",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray,
+                        style = TextStyle.bodyMedium,
+                        color = Theme.extendedColorScheme.onBackgroundHint,
                     )
                 }
             }
@@ -134,8 +134,8 @@ fun AddressListScreen(navController: NavController, viewModel: AddressListViewMo
                 ) {
                     Text(
                         text = addressState.message,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray,
+                        style = TextStyle.bodyMedium,
+                        color = Theme.extendedColorScheme.onBackgroundHint,
                     )
                     Button(onClick = { viewModel.getAddress() }) {
                         Text(text = "Обновить")

@@ -5,28 +5,30 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.coursework.ui.navigation.Home
+import com.example.coursework.ui.theme.TextStyle
+import com.example.coursework.ui.theme.Theme
 
 @Composable
-fun OrderSuccess(orderID: String, navController: NavController) {
+fun OrderSuccess(orderID: String, navController: NavController, modifier: Modifier = Modifier) {
     BackHandler {
         navController.popBackStack(route = Home, inclusive = false)
     }
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
     ) {
-        Text(text = "Успешный заказ", style = MaterialTheme.typography.titleMedium)
+        Text(text = "Успешный заказ", style = TextStyle.titleMedium)
         Text(
             text = "ID Заказа: $orderID",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray,
+            style = TextStyle.bodyMedium,
+            color = Theme.extendedColorScheme.onBackgroundHint,
         )
         Button(onClick = {
             navController.popBackStack(route = Home, inclusive = false)
