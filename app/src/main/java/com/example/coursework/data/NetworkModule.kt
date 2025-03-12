@@ -40,7 +40,7 @@ object NetworkModule {
 
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
-        val baseUrl = "http://10.0.2.2:8080"
+        val baseUrl = "http://109.68.214.122"
         val retrofit = Retrofit.Builder()
             .client(client)
             .baseUrl(baseUrl)

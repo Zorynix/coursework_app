@@ -153,7 +153,7 @@ fun CartScreen(navController: NavController, viewModel: CartViewModel = hiltView
                 Modifier
                     .clip(CircleShape)
                     .clickable {
-                        viewModel.navigateBack()
+                        navController.popBackStack()
                     },
                 contentDescription = "Назад",
             )
@@ -268,7 +268,7 @@ fun AddressCard(address: Address?, modifier: Modifier = Modifier, onAddressClick
             .clip(
                 RoundedCornerShape(16.dp),
             )
-            .background(MaterialTheme.colorScheme.onBackground)
+            .background(Theme.extendedColorScheme.backgroundBox)
             .clickable { onAddressClicked.invoke() }
             .padding(16.dp),
     ) {

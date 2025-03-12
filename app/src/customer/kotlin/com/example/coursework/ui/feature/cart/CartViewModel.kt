@@ -78,11 +78,6 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
         updateItemQuantity(cartItem, cartItem.quantity - 1)
     }
 
-    fun navigateBack() {
-        viewModelScope.launch {
-            _event.emit(CartEvent.NavigateBack)
-        }
-    }
 
     private fun updateItemQuantity(cartItem: CartItem, quantity: Int) {
         viewModelScope.launch {
@@ -207,7 +202,6 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
     }
 
     sealed class CartEvent {
-        data class NavigateToLastScreen(val order: Order) : CartEvent()
         object showErrorDialog : CartEvent()
         data class OrderSuccess(val orderId: String?) : CartEvent()
         object OnCheckout : CartEvent()
@@ -215,6 +209,5 @@ class CartViewModel @Inject constructor(val foodApi: FoodApi) : ViewModel() {
         object onQuantityUpdateError : CartEvent()
         object onItemRemoveError : CartEvent()
         object onAddressClicked : CartEvent()
-        object NavigateBack : CartEvent()
     }
 }

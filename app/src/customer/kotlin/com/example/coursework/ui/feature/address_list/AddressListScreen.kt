@@ -71,7 +71,7 @@ fun AddressListScreen(navController: NavController, modifier: Modifier = Modifie
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.back),
@@ -88,7 +88,6 @@ fun AddressListScreen(navController: NavController, modifier: Modifier = Modifie
                 contentDescription = null,
                 modifier =
                 Modifier
-                    .padding(16.dp)
                     .size(25.dp)
                     .clickable {
                         viewModel.onAddAddressClicked()
