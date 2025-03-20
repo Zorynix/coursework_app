@@ -152,6 +152,7 @@ class MainActivity : BaseCourseWorkActivity() {
                     BottomNavItem.Orders,
                 )
                 val navController = rememberNavController()
+                val modifier = Modifier
                 val cartViewModel: CartViewModel = hiltViewModel()
                 val cartItemSize = cartViewModel.cartItemCount.collectAsStateWithLifecycle()
                 val notificationViewModel: NotificationsViewModel = hiltViewModel()
@@ -288,7 +289,7 @@ class MainActivity : BaseCourseWorkActivity() {
                             }
                             composable<Notification> {
                                 SideEffect { shouldShowBottomNav.value = true }
-                                NotificationsList(navController, notificationViewModel)
+                                NotificationsList(modifier, navController, notificationViewModel)
                             }
                             composable<AddressList> {
                                 shouldShowBottomNav.value = false

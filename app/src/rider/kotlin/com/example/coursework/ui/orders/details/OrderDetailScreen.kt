@@ -1,0 +1,104 @@
+package com.example.coursework.ui.orders.details
+
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import  com.example.coursework.ui.theme.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.example.coursework.ui.features.notifications.ErrorScreen
+import com.example.coursework.ui.features.notifications.LoadingScreen
+import kotlinx.coroutines.flow.collectLatest
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun OrderDetailsScreen(
+    modifier: Modifier,
+    orderId: String,
+    navController: NavController,
+    viewModel: OrderDetailsViewModel = hiltViewModel()
+) {
+    LaunchedEffect(key1 = orderId) {
+        viewModel.getOrderDetails(orderId)
+    }
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(text = "Детали заказа")
+        LaunchedEffect(key1 = true) {
+            viewModel.event.collectLatest {
+                when (it) {
+                    is OrderDetailsViewModel.OrderDetailsEvent.NavigateBack -> {
+                        navController.popBackStack()
+                    }
+
+                    is OrderDetailsViewModel.OrderDetailsEvent.ShowPopUp -> {
+                        Toast.makeText(navController.context, it.msg, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+
+        val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+        when (uiState.value) {
+            is OrderDetailsViewModel.OrderDetailsUiState.Loading -> {
+                LoadingScreen()
+            }
+
+            is OrderDetailsViewModel.OrderDetailsUiState.Error -> {
+                ErrorScreen(message = "Что-то пошло не так") {
+                    viewModel.getOrderDetails(orderId)
+                }
+            }
+
+            is OrderDetailsViewModel.OrderDetailsUiState.Success -> {
+                val order =
+                    (uiState.value as OrderDetailsViewModel.OrderDetailsUiState.Success).order
+                Text(text = order.id)
+                Spacer(modifier = Modifier.padding(8.dp))
+                order.items.forEach {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .shadow(8.dp)
+                            .background(Color.White)
+                            .padding(16.dp)
+                    ) {
+                        Text(text = it.menuItemName ?: "")
+                        Text(text = it.quantity.toString())
+                    }
+                }
+                FlowRow(modifier = Modifier.fillMaxWidth()) {
+                    viewModel.listOfStatus.forEach {
+                        Button(
+                            onClick = { viewModel.updateOrderStatus(orderId, it) },
+                            enabled = order.status != it
+                        ) {
+                            Text(text = it)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

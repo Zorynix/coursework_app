@@ -60,7 +60,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun AuthScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
     isCustomer: Boolean = true,
     viewModel: AuthScreenViewModel = hiltViewModel(),
 ) {
@@ -104,7 +103,7 @@ fun AuthScreen(
 
     Box(
         modifier =
-        modifier
+        Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {

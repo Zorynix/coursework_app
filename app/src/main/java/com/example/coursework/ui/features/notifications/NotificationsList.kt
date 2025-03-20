@@ -13,7 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import com.example.coursework.ui.theme.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -25,10 +26,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.coursework.data.models.Notification
 import com.example.coursework.ui.navigation.OrderDetails
+import com.example.coursework.ui.theme.TextStyle
 import kotlinx.coroutines.flow.collectLatest
 
+
 @Composable
-fun NotificationsList(navController: NavController, viewModel: NotificationsViewModel) {
+fun NotificationsList(modifier: Modifier, navController: NavController, viewModel: NotificationsViewModel) {
+
     val state = viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = true) {
         viewModel.event.collectLatest {
@@ -39,7 +43,8 @@ fun NotificationsList(navController: NavController, viewModel: NotificationsView
             }
         }
     }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
+
         when (state.value) {
             is NotificationsViewModel.NotificationsState.Loading -> {
                 LoadingScreen()
@@ -48,18 +53,33 @@ fun NotificationsList(navController: NavController, viewModel: NotificationsView
             is NotificationsViewModel.NotificationsState.Success -> {
                 Text(
                     text = "Уведомления",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier =
-                    Modifier
+                    style = TextStyle.titleMedium,
+                    modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
                 val notifications =
                     (state.value as NotificationsViewModel.NotificationsState.Success).data
-                LazyColumn {
-                    items(notifications, key = { it.id }) {
-                        NotificationItem(it) {
-                            viewModel.readNotification(it)
+                if (notifications.isEmpty()) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Нет уведомлений",
+                            style = TextStyle.titleMedium,
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                        )
+                    }
+                } else {
+                    LazyColumn {
+                        items(notifications, key = { it.id }) {
+                            NotificationItem(it) {
+                                viewModel.readNotification(it)
+                            }
                         }
                     }
                 }
@@ -73,31 +93,27 @@ fun NotificationsList(navController: NavController, viewModel: NotificationsView
                 }
             }
         }
+
     }
 }
 
 @Composable
 fun NotificationItem(notification: Notification, onRead: () -> Unit) {
     Column(
-        modifier =
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(
-                if (notification.isRead) {
-                    Color.Transparent
-                } else {
-                    MaterialTheme.colorScheme.primary.copy(
-                        alpha = 0.1f,
-                    )
-                },
+                if (notification.isRead) Color.Transparent else MaterialTheme.colorScheme.primary.copy(
+                    alpha = 0.1f
+                )
             )
             .clickable { onRead() }
-            .padding(16.dp),
+            .padding(16.dp)
     ) {
-        Text(text = notification.title, style = MaterialTheme.typography.titleMedium)
-        Text(text = notification.message, style = MaterialTheme.typography.bodySmall)
+        Text(text = notification.title, style = TextStyle.titleMedium)
+        Text(text = notification.message, style = TextStyle.bodySmall)
     }
 }
 
@@ -106,7 +122,7 @@ fun LoadingScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator()
     }
@@ -117,7 +133,7 @@ fun ErrorScreen(message: String, onRetry: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(message)
         Button(onClick = { onRetry() }) {

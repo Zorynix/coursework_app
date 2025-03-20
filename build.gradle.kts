@@ -24,8 +24,8 @@ detekt {
 
 dependencies {
     detektPlugins(libs.detekt.formatting)
-    detektPlugins("io.nlopez.compose.rules:detekt:0.4.22")
-    detektPlugins("ru.kode:detekt-rules-compose:1.4.0")
+    detektPlugins(libs.detekt)
+    detektPlugins(libs.detekt.rules.compose)
 }
 
 subprojects {

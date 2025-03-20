@@ -92,7 +92,7 @@ object AppTheme {
           outline = Color(0xFFbdbdbd),
           outlineActive = Color(0xFFbdbdbd),
           outlineDanger = Color(0xFFad2b2b),
-          backgroundBox = Color(0xFFEEEE),
+          backgroundBox = Color(0xFFEDE5E3),
       )
   val Dark =
       ColorScheme(

@@ -483,7 +483,7 @@ fun CategoryItem(
         modifier =
         modifier
             .padding(8.dp)
-            .height(90.dp)
+            .height(100.dp)
             .widthIn(60.dp, 100.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(Theme.extendedColorScheme.backgroundBox)

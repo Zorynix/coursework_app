@@ -9,6 +9,7 @@ import com.example.coursework.data.models.CartResponse
 import com.example.coursework.data.models.CategoriesResponse
 import com.example.coursework.data.models.ConfirmPaymentRequest
 import com.example.coursework.data.models.ConfirmPaymentResponse
+import com.example.coursework.data.models.DeliveriesListResponse
 import com.example.coursework.data.models.FCMRequest
 import com.example.coursework.data.models.FoodItem
 import com.example.coursework.data.models.FoodItemListResponse
@@ -24,6 +25,7 @@ import com.example.coursework.data.models.PaymentIntentResponse
 import com.example.coursework.data.models.Restaurant
 import com.example.coursework.data.models.ResturauntsResponse
 import com.example.coursework.data.models.ReverseGeoCodeRequest
+import com.example.coursework.data.models.RiderDeliveryOrderListResponse
 import com.example.coursework.data.models.SignInRequest
 import com.example.coursework.data.models.SignUpRequest
 import com.example.coursework.data.models.UpdateCartItemRequest
@@ -128,4 +130,16 @@ interface FoodApi {
     @POST("/images/upload")
     @Multipart
     suspend fun uploadImage(@Part image: MultipartBody.Part): Response<ImageUploadResponse>
+
+    @GET("/rider/deliveries/available")
+    suspend fun getAvailableDeliveries(): Response<DeliveriesListResponse>
+
+    @POST("/rider/deliveries/{orderId}/reject")
+    suspend fun rejectDelivery(@Path("orderId") orderId: String): Response<GenericMsgResponse>
+
+    @POST("/rider/deliveries/{orderId}/accept")
+    suspend fun acceptDelivery(@Path("orderId") orderId: String): Response<GenericMsgResponse>
+
+    @GET("/rider/deliveries/active")
+    suspend fun getActiveDeliveries(): Response<RiderDeliveryOrderListResponse>
 }
